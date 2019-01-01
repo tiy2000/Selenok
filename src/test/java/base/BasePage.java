@@ -13,6 +13,7 @@ public class BasePage {
     WebDriverWait wait;
     protected int defaultTimeOutInSeconds = 15;
 
+    protected By pageIdLocator = null;
 
 
     // ===== Working with WebDriver instance =====
@@ -34,7 +35,6 @@ public class BasePage {
     }
 
 
-
     // ===== Waiting for elements
 
     public WebElement waitElement(By by) throws TimeoutException {
@@ -47,7 +47,42 @@ public class BasePage {
     }
 
 
+    // Right page validation
 
+    public boolean isRightPage() {
+        if (pageIdLocator != null) {
+            try {
+                waitElement(pageIdLocator);
+            } catch (TimeoutException e) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public void validateIsRightPage() {
+        if (!isRightPage()) {
+            throw new InvalidPageStateException(makeMessage().toString());
+        }
+    }
+
+    public void assertRightPage() {
+        if (!isRightPage()) {
+            throw new AssertionError(makeMessage().toString());
+        }
+    }
+
+    private StringBuilder makeMessage() {
+        StringBuilder sb = new StringBuilder();
+        sb
+                .append("Page ")
+                .append(this.getClass().getSimpleName())
+                .append(" is not loaded\n")
+                .append("since the element with locator\n")
+                .append(pageIdLocator.toString())
+                .append("\nnot found.");
+        return sb;
+    }
 
 
 }
