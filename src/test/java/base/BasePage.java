@@ -55,16 +55,26 @@ public class BasePage {
 
     // ===== Working with Web elements =====
 
-    public WebElement findElement(By by) {
+    protected WebElement findElement(By by) {
+//         May be...
+//        WebElement element = waitElement(by);
+//        return element;
+
         return getDriver().findElement(by);
     }
 
-    public void sendKeys(By by, CharSequence...charSequences) {
-        getDriver().findElement(by).sendKeys(charSequences);
+    protected void sendKeys(By by, CharSequence...charSequences) {
+        findElement(by).sendKeys(charSequences);
     }
 
-    public void click(By by) {
-        getDriver().findElement(by).click();
+    protected void clearAndFill(By by, CharSequence... charSequences) {
+        WebElement element = findElement(by);
+        element.clear();
+        element.sendKeys(charSequences);
+    }
+
+    protected void click(By by) {
+        findElement(by).click();
     }
 
 
