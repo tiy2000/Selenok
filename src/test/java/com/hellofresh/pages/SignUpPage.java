@@ -35,4 +35,51 @@ public class SignUpPage extends HelloFreshBasePage {
         return new InvitePage();
 
     }
+
+    public InvitePage clickRegistrationButton() {
+        click(REGISTRATION_BUTTON);
+        return new InvitePage();
+    }
+
+    public SignUpPage clearAndFillFirstName(String firstName) {
+        clearAndFill(FIRST_NAME_INPUT, firstName);
+        return this;
+    }
+
+    public SignUpPage clearAndFillLastName(String lastName) {
+        clearAndFill(LAST_NAME_INPUT, lastName);
+        return this;
+    }
+
+    public SignUpPage clearAndFillEmail(String email) {
+        clearAndFill(EMAIL_INPUT, email);
+        return this;
+    }
+
+    public SignUpPage clearAndFillPassword(String password) {
+        clearAndFill(PASSWORD_INPUT, password);
+        return this;
+    }
+
+    public SignUpPage clearAndFillMonth(String month) {
+        clearAndFill(MONTH_INPUT, month);
+        return this;
+    }
+
+    public SignUpPage clearAndFillDay(String day) {
+        clearAndFill(DAY_INPUT, day);
+        return this;
+    }
+
+    public SignUpPage clearAndFillYear(String year) {
+        clearAndFill(YEAR_INPUT, year);
+        return this;
+    }
+
+    public SignUpPage selectGender(String gender) {
+        Select select = new Select(getDriver().findElement(GENDER_SELECT_INPUT));
+        select.selectByValue(gender);
+        return this;
+    }
+
 }

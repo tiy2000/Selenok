@@ -21,12 +21,36 @@ public class RegistrationTest extends BaseTest {
     }
 
     @Test
-    public void registrationTest() {
+    public void badRegistrationTest() {
         LoginPage loginPage = LoginPage.openNewPage();
         loginPage.validateIsRightPage();
 
         SignUpPage signUpPage = loginPage.clickRegisterUserLink();
         InvitePage invitePage = signUpPage.fillRegistrationFields();
+
+        invitePage.assertRightPage();
+
+    }
+
+    @Test
+    public void goodRegistrationTest() {
+        LoginPage loginPage = LoginPage.openNewPage();
+        loginPage.validateIsRightPage();
+
+        SignUpPage signUpPage = loginPage.clickRegisterUserLink();
+        signUpPage.validateIsRightPage();
+
+        signUpPage
+                .selectGender("male")
+                .clearAndFillFirstName("Alex")
+                .clearAndFillLastName("Bow")
+                .clearAndFillEmail("qwerty57@nono.to")
+                .clearAndFillPassword("12345678")
+                .clearAndFillMonth("12")
+                .clearAndFillDay("20")
+                .clearAndFillYear("2000");
+
+        InvitePage invitePage = signUpPage.clickRegistrationButton();
 
         invitePage.assertRightPage();
 
