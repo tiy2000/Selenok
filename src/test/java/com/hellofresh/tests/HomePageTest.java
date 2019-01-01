@@ -11,20 +11,27 @@ public class HomePageTest extends BaseTest {
 
     @BeforeMethod
     public void init() {
-        createChromeWebDriver(AutoTearDown.NONE);
+//        createChromeWebDriver(AutoTearDown.NONE);
+        createChromeWebDriver(AutoTearDown.AFTER_METHOD);
     }
 
-    @AfterMethod
-    public void tearDown() {
-        tearDownDriver();
-    }
+//    @AfterMethod
+//    public void tearDown() {
+//        tearDownDriver();
+//    }
 
     @Test
     public void homePageTest() {
-        HomePage homePage = new HomePage();
-        homePage.openPage();
-//        homePage.assertRightPage();
+//        HomePage homePage = new HomePage();
+//        homePage.openPage();
+
+        HomePage homePage = HomePage.openNewHomePage();
+
         homePage.validateIsRightPage();
+//        homePage.assertRightPage();
+
+
+
     }
 
 
