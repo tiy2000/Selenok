@@ -7,8 +7,8 @@ public class HomePage extends HelloFreshBasePage {
 
     public HomePage() {
         setPagePath("");
-        pageIdLocator = By.xpath("(//span[@data-translation-id='senf-navigation.login'])[2]");
-//        pageIdLocator = By.xpath("(//span[@data-translation-id='senf-navigation.login_INVALID_LOCATOR'])[2]");
+//        pageIdLocator = By.xpath("(//span[@data-translation-id='senf-navigation.login'])[2]");
+        pageIdLocator = By.xpath("(//span[@data-translation-id='senf-navigation.login_INVALID_LOCATOR'])[2]");
     }
 
 

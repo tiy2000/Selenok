@@ -23,7 +23,8 @@ public class HomePageTest extends BaseTest {
     public void homePageTest() {
         HomePage homePage = new HomePage();
         homePage.openPage();
-        homePage.assertRightPage();
+//        homePage.assertRightPage();
+        homePage.validateIsRightPage();
     }
 
 
