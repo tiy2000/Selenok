@@ -24,7 +24,7 @@ public class BaseTest {
     }
 
     @AfterClass
-    void autoTearDownAfterClass() {
+    protected void autoTearDownAfterClass() {
         if (autoTearDown == AutoTearDown.AFTER_CLASS) {
             System.out.println("BaseTest.autoTearDownAfterClass");
             tearDownDriver();
@@ -32,7 +32,7 @@ public class BaseTest {
     }
 
     @AfterMethod
-    void autoTearDownAfterMethod() {
+    protected void autoTearDownAfterMethod() {
         if (autoTearDown == AutoTearDown.AFTER_METHOD) {
             System.out.println("BaseTest.autoTearDownAfterMethod");
             tearDownDriver();
@@ -70,30 +70,5 @@ public class BaseTest {
         WebDriver driver = new ChromeDriver();
         setDriver(driver);
     }
-
-
-
-
-    // ===== For debug only =====
-
-//    @BeforeClass
-//    public void debugBeforeClass() {
-//        createChromeWebDriver(AutoTearDown.AFTER_CLASS);
-//    }
-//
-//    @BeforeMethod
-//    public void debugBeforeMethod() {
-//        createChromeWebDriver(AutoTearDown.AFTER_METHOD);
-//    }
-//
-//    @Test
-//    public void debugTest() {
-////        createChromeWebDriver(AutoTearDown.AFTER_METHOD);
-//        System.out.println(getDriver());
-//        System.out.println(BasePage.getDriver());
-//        tearDownDriver();
-//        System.out.println(getDriver());
-//        System.out.println(BasePage.getDriver());
-//    }
 
 }
