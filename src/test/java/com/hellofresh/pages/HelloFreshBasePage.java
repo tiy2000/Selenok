@@ -2,8 +2,7 @@ package com.hellofresh.pages;
 
 import base.BasePage;
 
-public class HomePage extends HelloFreshBasePage {
-
+public class HelloFreshBasePage extends BasePage {
 
 
 }
