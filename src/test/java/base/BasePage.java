@@ -7,6 +7,10 @@ public class BasePage {
     private static final ThreadLocal<WebDriver> driverThreadLocal = new ThreadLocal<>();
 
 
+
+
+    // ===== Working with WebDriver instance =====
+
     static void setDriver(WebDriver driver) {
         driverThreadLocal.set(driver);
     }
