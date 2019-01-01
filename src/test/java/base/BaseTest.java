@@ -80,20 +80,20 @@ public class BaseTest {
 //    public void debugBeforeClass() {
 //        createChromeWebDriver(AutoTearDown.AFTER_CLASS);
 //    }
-
-    @BeforeMethod
-    public void debugBeforeMethod() {
-        createChromeWebDriver(AutoTearDown.AFTER_METHOD);
-    }
-
-    @Test
-    public void debugTest() {
+//
+//    @BeforeMethod
+//    public void debugBeforeMethod() {
 //        createChromeWebDriver(AutoTearDown.AFTER_METHOD);
-        System.out.println(getDriver());
-        System.out.println(BasePage.getDriver());
-        tearDownDriver();
-        System.out.println(getDriver());
-        System.out.println(BasePage.getDriver());
-    }
+//    }
+//
+//    @Test
+//    public void debugTest() {
+////        createChromeWebDriver(AutoTearDown.AFTER_METHOD);
+//        System.out.println(getDriver());
+//        System.out.println(BasePage.getDriver());
+//        tearDownDriver();
+//        System.out.println(getDriver());
+//        System.out.println(BasePage.getDriver());
+//    }
 
 }
