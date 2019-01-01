@@ -11,7 +11,7 @@ public class HomePage extends HelloFreshBasePage {
 //        pageIdLocator = By.xpath("(//span[@data-translation-id='senf-navigation.login_INVALID_LOCATOR'])[2]");
     }
 
-    public static HomePage openNewHomePage() {
+    public static HomePage openNewPage() {
         HomePage homePage = new HomePage();
         homePage.openPage();
         return homePage;
