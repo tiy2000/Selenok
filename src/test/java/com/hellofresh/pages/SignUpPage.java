@@ -14,10 +14,11 @@ public class SignUpPage extends HelloFreshBasePage {
     public static final By DAY_INPUT = By.id("day-input");
     public static final By YEAR_INPUT = By.id("year-input");
     public static final By REGISTRATION_BUTTON = By.id("register-button");
+    public static final By GENDER_SELECT_INPUT = By.id("gender-input");
 
     public InvitePage fillRegistrationFields() {
 //        driver.findElement(By.id("gender-input")).findElement(By.cssSelector("[id='gender-input'] :nth-child(2)")).click();
-        Select select = new Select(getDriver().findElement(By.id("gender-input")));
+        Select select = new Select(getDriver().findElement(GENDER_SELECT_INPUT));
         select.selectByValue("male");
 
         getDriver().findElement(FIRST_NAME_INPUT).sendKeys("Alex");
