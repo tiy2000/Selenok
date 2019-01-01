@@ -10,10 +10,14 @@ public class BasePage {
 
     private static final ThreadLocal<WebDriver> driverThreadLocal = new ThreadLocal<>();
 
-    WebDriverWait wait;
     protected int defaultTimeOutInSeconds = 15;
+    WebDriverWait wait = new WebDriverWait(getDriver(), defaultTimeOutInSeconds);
 
     protected By pageIdLocator = null;
+
+    private static String BASE_URL;
+    private String pagePath;
+
 
 
     // ===== Working with WebDriver instance =====
@@ -35,6 +39,7 @@ public class BasePage {
     }
 
 
+
     // ===== Waiting for elements
 
     public WebElement waitElement(By by) throws TimeoutException {
@@ -45,6 +50,7 @@ public class BasePage {
     public void waitElementDisplayed(By by) throws TimeoutException {
         wait.until(driver -> driver.findElement(by).isDisplayed());
     }
+
 
 
     // Right page validation
@@ -84,5 +90,36 @@ public class BasePage {
         return sb;
     }
 
+
+
+    // ===== Opening pages =====
+
+    public void openPage() {
+        getDriver().get(getFullPagePath());
+    }
+
+    public String getFullPagePath() {
+        String fullPath = getBaseUrl();
+        if (!fullPath.endsWith("/") && !getPagePath().endsWith("/")) {
+            fullPath += "/";
+        }
+        return fullPath + getPagePath();
+    }
+
+    public String getPagePath() {
+        return pagePath;
+    }
+
+    public void setPagePath(String pagePath) {
+        this.pagePath = pagePath;
+    }
+
+    public static String getBaseUrl() {
+        return BASE_URL;
+    }
+
+    public static void setBaseUrl(String baseUrl) {
+        BASE_URL = baseUrl;
+    }
 
 }
