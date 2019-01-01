@@ -53,7 +53,23 @@ public class BasePage {
 
 
 
-    // Right page validation
+    // ===== Working with Web elements =====
+
+    public WebElement findElement(By by) {
+        return getDriver().findElement(by);
+    }
+
+    public void sendKeys(By by, CharSequence...charSequences) {
+        getDriver().findElement(by).sendKeys(charSequences);
+    }
+
+    public void click(By by) {
+        getDriver().findElement(by).click();
+    }
+
+
+
+    // ===== Right page validation =====
 
     public boolean isRightPage() {
         if (pageIdLocator != null) {
