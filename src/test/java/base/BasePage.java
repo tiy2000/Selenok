@@ -10,8 +10,8 @@ public class BasePage {
 
     private static final ThreadLocal<WebDriver> driverThreadLocal = new ThreadLocal<>();
 
-    WebDriverWait wait;
     protected int defaultTimeOutInSeconds = 15;
+    WebDriverWait wait = new WebDriverWait(getDriver(), defaultTimeOutInSeconds);
 
     protected By pageIdLocator = null;
 
