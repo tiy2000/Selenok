@@ -28,7 +28,7 @@ public class RegistrationTest extends BaseTest {
         System.out.println("RegistrationTest.directOpeningLoginPageTest EXIT");
     }
 
-    @Test(dependsOnMethods = "directOpeningLoginPageTest",enabled = false)
+    @Test(dependsOnMethods = "directOpeningLoginPageTest")
     public void badRegistrationTest() {
         LoginPage loginPage = LoginPage.openNewPage();
         loginPage.validateIsRightPage();
@@ -38,7 +38,8 @@ public class RegistrationTest extends BaseTest {
 
         InvitePage invitePage = signUpPage.fillRegistrationFields();
 
-        invitePage.assertRightPage();
+//        invitePage.assertRightPage();
+        invitePage.validateIsRightPage();
 
     }
 
