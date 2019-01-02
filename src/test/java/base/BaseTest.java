@@ -40,13 +40,17 @@ public class BaseTest {
     }
 
     private void setDriver(WebDriver driver) {
+        System.out.println("BaseTest.setDriver ENTER");
         driverThreadLocal.set(driver);
         BasePage.setDriver(driver);
+        System.out.println("BaseTest.setDriver EXIT");
     }
 
     private void resetDriver() {
+        System.out.println("BaseTest.resetDriver ENTER");
         driverThreadLocal.remove();
         BasePage.resetDriver();
+        System.out.println("BaseTest.resetDriver EXIT");
     }
 
     public WebDriver getDriver() {
@@ -59,10 +63,12 @@ public class BaseTest {
 
 
     public void tearDownDriver() {
+        System.out.println("BaseTest.tearDownDriver ENTER");
         if (isDriverCreated()) {
             getDriver().quit();
             resetDriver();
         }
+        System.out.println("BaseTest.tearDownDriver EXIT");
     }
 
     public void createChromeWebDriver(AutoTearDown autoTearDown) {
