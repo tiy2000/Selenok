@@ -2,3 +2,5 @@
 target/
 *.iml
 .DS_*
+allure-results/
+.allure/
