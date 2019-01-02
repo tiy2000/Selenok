@@ -28,7 +28,7 @@ public class RegistrationTest extends BaseTest {
         System.out.println("RegistrationTest.directOpeningLoginPageTest EXIT");
     }
 
-    @Test(dependsOnMethods = "directOpeningLoginPageTest")
+    @Test(dependsOnMethods = "directOpeningLoginPageTest",enabled = false)
     public void badRegistrationTest() {
         LoginPage loginPage = LoginPage.openNewPage();
         loginPage.validateIsRightPage();
