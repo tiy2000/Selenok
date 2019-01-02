@@ -7,12 +7,14 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.time.Duration;
+
 public class BasePage {
 
     private static final ThreadLocal<WebDriver> driverThreadLocal = new ThreadLocal<>();
 
     private int defaultTimeOutInSeconds = 15;
-    private WebDriverWait wait = new WebDriverWait(getDriver(), getDefaultTimeOutInSeconds());
+    private WebDriverWait wait;
 
     protected By pageIdLocator = null;
 
@@ -20,8 +22,12 @@ public class BasePage {
     private String pagePath;
 
 
+    public BasePage() {
+        wait = new WebDriverWait(getDriver(), defaultTimeOutInSeconds);
+    }
 
-    // ===== Working with WebDriver instance =====
+
+// ===== Working with WebDriver instance =====
 
     static void setDriver(WebDriver driver) {
         driverThreadLocal.set(driver);
@@ -45,13 +51,21 @@ public class BasePage {
 
     public WebElement waitElement(By by) throws TimeoutException {
         System.out.println("BasePage.waitElement ENTER, BY: " + by.toString());
-        WebElement element = wait.until(driver -> driver.findElement(by));
+
+        WebElement element = wait.withTimeout(Duration.ofSeconds(defaultTimeOutInSeconds))
+                .until(driver -> driver.findElement(by));
+
         System.out.println("BasePage.waitElement EXIT");
         return element;
     }
 
     public void waitElementDisplayed(By by) throws TimeoutException {
-        wait.until(driver -> driver.findElement(by).isDisplayed());
+        System.out.println("BasePage.waitElementDisplayed ENTER, BY: " + by.toString());
+
+        wait.withTimeout(Duration.ofSeconds(defaultTimeOutInSeconds))
+                .until(driver -> driver.findElement(by).isDisplayed());
+
+        System.out.println("BasePage.waitElementDisplayed EXIT");
     }
 
     public int getDefaultTimeOutInSeconds() {
