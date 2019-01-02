@@ -10,20 +10,22 @@ import org.testng.annotations.Test;
 
 public class RegistrationTest extends BaseTest {
 
-    @BeforeClass
-    public void initBeforeClass() {
-        createChromeWebDriver(AutoTearDown.AFTER_CLASS);
-    }
-
-//    @BeforeMethod
-//    public void initBeforeMethod() {
-//        createChromeWebDriver(AutoTearDown.AFTER_METHOD);
+//    @BeforeClass
+//    public void initBeforeClass() {
+//        createChromeWebDriver(AutoTearDown.AFTER_CLASS);
 //    }
+
+    @BeforeMethod
+    public void initBeforeMethod() {
+        createChromeWebDriver(AutoTearDown.AFTER_METHOD);
+    }
 
     @Test
     public void directOpeningLoginPageTest() {
+        System.out.println("RegistrationTest.directOpeningLoginPageTest ENTER");
         LoginPage loginPage = LoginPage.openNewPage();
         loginPage.assertRightPage();
+        System.out.println("RegistrationTest.directOpeningLoginPageTest EXIT");
     }
 
     @Test(dependsOnMethods = "directOpeningLoginPageTest")
@@ -42,6 +44,7 @@ public class RegistrationTest extends BaseTest {
 
     @Test(dependsOnMethods = "directOpeningLoginPageTest")
     public void goodRegistrationTest() {
+        System.out.println("RegistrationTest.goodRegistrationTest ENTER");
         LoginPage loginPage = LoginPage.openNewPage();
         loginPage.validateIsRightPage();
 
@@ -62,6 +65,7 @@ public class RegistrationTest extends BaseTest {
 
         invitePage.assertRightPage();
 
+        System.out.println("RegistrationTest.goodRegistrationTest EXIT");
     }
 
 }

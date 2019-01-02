@@ -16,6 +16,11 @@ public class SignUpPage extends HelloFreshBasePage {
     public static final By REGISTRATION_BUTTON = By.id("register-button");
     public static final By GENDER_SELECT_INPUT = By.id("gender-input");
 
+
+    public SignUpPage() {
+        pageIdLocator = FIRST_NAME_INPUT;
+    }
+
     public InvitePage fillRegistrationFields() {
 //        driver.findElement(By.id("gender-input")).findElement(By.cssSelector("[id='gender-input'] :nth-child(2)")).click();
         Select select = new Select(getDriver().findElement(GENDER_SELECT_INPUT));

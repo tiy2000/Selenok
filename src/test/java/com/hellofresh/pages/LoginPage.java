@@ -13,7 +13,9 @@ public class LoginPage extends HelloFreshBasePage {
 
     public static LoginPage openNewPage() {
         LoginPage loginPage = new LoginPage();
+        System.out.println("*** Before opening LoginPage");
         loginPage.openPage();
+        System.out.println("*** After opening LoginPage");
         return loginPage;
     }
 
