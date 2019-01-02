@@ -21,16 +21,10 @@ public class HomePageTest extends BaseTest {
 
     @Test
     public void homePageTest() {
-//        HomePage homePage = new HomePage();
-//        homePage.openPage();
-
         HomePage homePage = HomePage.openNewPage();
 
-        homePage.validateIsRightPage();
-//        homePage.assertRightPage();
-
-
-
+//        homePage.validateIsRightPage();
+        homePage.assertRightPage();
     }
 
 

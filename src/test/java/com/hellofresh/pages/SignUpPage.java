@@ -77,8 +77,7 @@ public class SignUpPage extends HelloFreshBasePage {
     }
 
     public SignUpPage selectGender(String gender) {
-        Select select = new Select(getDriver().findElement(GENDER_SELECT_INPUT));
-        select.selectByValue(gender);
+        selectByValue(GENDER_SELECT_INPUT, gender);
         return this;
     }
 

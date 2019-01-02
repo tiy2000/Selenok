@@ -8,4 +8,7 @@ public class HelloFreshBasePage extends BasePage {
         setBaseUrl("https://www.hellofresh.com");
     }
 
+    public HelloFreshBasePage() {
+        setDefaultTimeOutInSeconds(5);
+    }
 }

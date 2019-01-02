@@ -4,15 +4,21 @@ import base.BaseTest;
 import com.hellofresh.pages.InvitePage;
 import com.hellofresh.pages.LoginPage;
 import com.hellofresh.pages.SignUpPage;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 public class RegistrationTest extends BaseTest {
 
-    @BeforeMethod
-    public void init() {
-        createChromeWebDriver(AutoTearDown.AFTER_METHOD);
+    @BeforeClass
+    public void initBeforeClass() {
+        createChromeWebDriver(AutoTearDown.AFTER_CLASS);
     }
+
+//    @BeforeMethod
+//    public void initBeforeMethod() {
+//        createChromeWebDriver(AutoTearDown.AFTER_METHOD);
+//    }
 
     @Test
     public void directOpeningLoginPageTest() {
@@ -20,19 +26,21 @@ public class RegistrationTest extends BaseTest {
         loginPage.assertRightPage();
     }
 
-    @Test
+    @Test(dependsOnMethods = "directOpeningLoginPageTest")
     public void badRegistrationTest() {
         LoginPage loginPage = LoginPage.openNewPage();
         loginPage.validateIsRightPage();
 
         SignUpPage signUpPage = loginPage.clickRegisterUserLink();
+        signUpPage.validateIsRightPage();
+
         InvitePage invitePage = signUpPage.fillRegistrationFields();
 
         invitePage.assertRightPage();
 
     }
 
-    @Test
+    @Test(dependsOnMethods = "directOpeningLoginPageTest")
     public void goodRegistrationTest() {
         LoginPage loginPage = LoginPage.openNewPage();
         loginPage.validateIsRightPage();
