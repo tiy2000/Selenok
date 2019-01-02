@@ -4,14 +4,15 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class BasePage {
 
     private static final ThreadLocal<WebDriver> driverThreadLocal = new ThreadLocal<>();
 
-    protected int defaultTimeOutInSeconds = 15;
-    WebDriverWait wait = new WebDriverWait(getDriver(), defaultTimeOutInSeconds);
+    private int defaultTimeOutInSeconds = 15;
+    private WebDriverWait wait = new WebDriverWait(getDriver(), getDefaultTimeOutInSeconds());
 
     protected By pageIdLocator = null;
 
@@ -30,11 +31,11 @@ public class BasePage {
         driverThreadLocal.remove();
     }
 
-    static public WebDriver getDriver() {
+    public static WebDriver getDriver() {
         return driverThreadLocal.get();
     }
 
-    static public boolean isDriverCreated() {
+    public static boolean isDriverCreated() {
         return getDriver() != null;
     }
 
@@ -43,7 +44,9 @@ public class BasePage {
     // ===== Waiting for elements
 
     public WebElement waitElement(By by) throws TimeoutException {
+        System.out.println("BasePage.waitElement ENTER");
         WebElement element = wait.until(driver -> driver.findElement(by));
+        System.out.println("BasePage.waitElement EXIT");
         return element;
     }
 
@@ -51,16 +54,23 @@ public class BasePage {
         wait.until(driver -> driver.findElement(by).isDisplayed());
     }
 
+    public int getDefaultTimeOutInSeconds() {
+        return defaultTimeOutInSeconds;
+    }
+
+    public void setDefaultTimeOutInSeconds(int defaultTimeOutInSeconds) {
+        this.defaultTimeOutInSeconds = defaultTimeOutInSeconds;
+    }
+
+
 
 
     // ===== Working with Web elements =====
 
     protected WebElement findElement(By by) {
-//         May be...
-//        WebElement element = waitElement(by);
-//        return element;
-
-        return getDriver().findElement(by);
+        WebElement element = waitElement(by);
+        return element;
+//        return getDriver().findElement(by);
     }
 
     protected void sendKeys(By by, CharSequence...charSequences) {
@@ -75,6 +85,16 @@ public class BasePage {
 
     protected void click(By by) {
         findElement(by).click();
+    }
+
+    protected void selectByValue(By by, String value) {
+        Select select = new Select(findElement(by));
+        select.selectByValue(value);
+    }
+
+    protected void selectByIndex(By by, int index) {
+        Select select = new Select(findElement(by));
+        select.selectByIndex(index);
     }
 
 
@@ -107,12 +127,14 @@ public class BasePage {
     private StringBuilder makeMessage() {
         StringBuilder sb = new StringBuilder();
         sb
-                .append("Page ")
+                .append("Current page is not '")
                 .append(this.getClass().getSimpleName())
-                .append(" is not loaded\n")
-                .append("since the element with locator\n")
+                .append("' since the pageIdElement has not found\n")
+                .append("pageIdElement locator: ")
                 .append(pageIdLocator.toString())
-                .append("\nnot found.");
+                .append("\ncurrent url: ")
+                .append(getDriver().getCurrentUrl())
+                .append("\n");
         return sb;
     }
 
