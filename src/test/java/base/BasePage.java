@@ -44,7 +44,7 @@ public class BasePage {
     // ===== Waiting for elements
 
     public WebElement waitElement(By by) throws TimeoutException {
-        System.out.println("BasePage.waitElement ENTER");
+        System.out.println("BasePage.waitElement ENTER, BY: " + by.toString());
         WebElement element = wait.until(driver -> driver.findElement(by));
         System.out.println("BasePage.waitElement EXIT");
         return element;
@@ -108,20 +108,29 @@ public class BasePage {
             } catch (TimeoutException e) {
                 return false;
             }
+        } else {
+            // Need to throw exception!
+            throw new RuntimeException("Call isRightPage() requires the pageIdLocator, but it was'nt assigned");
         }
         return true;
     }
 
     public void validateIsRightPage() {
+        System.out.println("BasePage.validateIsRightPage ENTER");
         if (!isRightPage()) {
+            System.out.println("BasePage.validateIsRightPage EXIT (FAIL)");
             throw new InvalidPageStateException(makeMessage().toString());
         }
+        System.out.println("BasePage.validateIsRightPage EXIT (PASS)");
     }
 
     public void assertRightPage() {
+        System.out.println("BasePage.assertRightPage ENTER");
         if (!isRightPage()) {
+            System.out.println("BasePage.assertRightPage ENTER (FAIL)");
             throw new AssertionError(makeMessage().toString());
         }
+        System.out.println("BasePage.assertRightPage ENTER (PASS)");
     }
 
     private StringBuilder makeMessage() {
