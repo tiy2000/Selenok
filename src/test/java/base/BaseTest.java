@@ -1,9 +1,15 @@
 package base;
 
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.SessionNotCreatedException;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.annotations.*;
 
+import java.io.File;
+
+@Listeners(ScreenshotListener.class)
 public class BaseTest {
 
     private static final ThreadLocal<WebDriver> driverThreadLocal = new ThreadLocal<>();
@@ -53,11 +59,11 @@ public class BaseTest {
         System.out.println("BaseTest.resetDriver EXIT");
     }
 
-    public WebDriver getDriver() {
+    public static WebDriver getDriver() {
         return driverThreadLocal.get();
     }
 
-    public boolean isDriverCreated() {
+    public static boolean isDriverCreated() {
         return getDriver() != null;
     }
 
@@ -76,5 +82,29 @@ public class BaseTest {
         WebDriver driver = new ChromeDriver();
         setDriver(driver);
     }
+
+
+    // ===== Getting screenshot =====
+
+    public static byte[] getScreenShotAsBytes() {
+        try {
+            return ((TakesScreenshot) getDriver()).getScreenshotAs(OutputType.BYTES);
+        } catch (SessionNotCreatedException e) {
+//            logger.error(String.format("Selenium screenshot capture failed: %s", e.getMessage()));
+//            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static File getScreenShotAsFiles() {
+        try {
+            return ((TakesScreenshot) getDriver()).getScreenshotAs(OutputType.FILE);
+        } catch (SessionNotCreatedException e) {
+//            logger.error(String.format("Selenium screenshot capture failed: %s", e.getMessage()));
+//            e.printStackTrace();
+        }
+        return null;
+    }
+
 
 }
