@@ -202,17 +202,6 @@ public class BasePage<T extends BasePage> {
 
     // ===== Opening pages =====
 
-    public T openNewPage() {
-        T newPage = null;
-        try {
-            newPage = (T) this.getClass().newInstance();
-            newPage.openPage();
-        } catch (InstantiationException | IllegalAccessException e) {
-            throw new InvalidUsageOrConfig("Creating new instance error: " + e.getMessage());
-        }
-        return newPage;
-    }
-
     public T openPage() {
         getDriver().get(getFullPagePath());
         return (T)this;
