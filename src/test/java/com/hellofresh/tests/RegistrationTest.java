@@ -28,22 +28,23 @@ public class RegistrationTest extends BaseTest {
         System.out.println("RegistrationTest.directOpeningLoginPageTest EXIT");
     }
 
-    @Test(dependsOnMethods = "directOpeningLoginPageTest")
-    public void badRegistrationTest() {
-        LoginPage loginPage = LoginPage.openNewPage();
-        loginPage.validateIsRightPage();
+//    @Test(dependsOnMethods = "directOpeningLoginPageTest")
+//    public void badRegistrationTest() {
+//        LoginPage loginPage = LoginPage.openNewPage();
+//        loginPage.validateIsRightPage();
+//
+//        SignUpPage signUpPage = loginPage.clickRegisterUserLink();
+//        signUpPage.validateIsRightPage();
+//
+//        InvitePage invitePage = signUpPage.fillRegistrationFields();
+//
+////        invitePage.assertRightPage();
+//        invitePage.validateIsRightPage();
+//
+//    }
 
-        SignUpPage signUpPage = loginPage.clickRegisterUserLink();
-        signUpPage.validateIsRightPage();
-
-        InvitePage invitePage = signUpPage.fillRegistrationFields();
-
-//        invitePage.assertRightPage();
-        invitePage.validateIsRightPage();
-
-    }
-
-    @Test(dependsOnMethods = "directOpeningLoginPageTest")
+//    @Test(dependsOnMethods = "directOpeningLoginPageTest")
+    @Test()
     public void goodRegistrationTest() {
         System.out.println("RegistrationTest.goodRegistrationTest ENTER");
         LoginPage loginPage = LoginPage.openNewPage();
@@ -65,6 +66,30 @@ public class RegistrationTest extends BaseTest {
         InvitePage invitePage = signUpPage.clickRegistrationButton();
 
         invitePage.assertRightPage();
+
+        System.out.println("RegistrationTest.goodRegistrationTest EXIT");
+    }
+
+    @Test()
+    public void bddRegistrationTest() {
+        System.out.println("RegistrationTest.goodRegistrationTest ENTER");
+
+        LoginPage.openNewPage()
+                .validateIsRightPage()
+                .clickRegisterUserLink()
+                    // Working with SignUpPage
+                    .validateIsRightPage()
+                    .selectGender("male")
+                    .clearAndFillFirstName("Alex")
+                    .clearAndFillLastName("Bow")
+                    .clearAndFillEmail("qwerty57@nono.to")
+                    .clearAndFillPassword("12345678")
+                    .clearAndFillMonth("12")
+                    .clearAndFillDay("20")
+                    .clearAndFillYear("2000")
+                    .clickRegistrationButton()
+                        // Working with InvitePage
+                        .assertRightPage();
 
         System.out.println("RegistrationTest.goodRegistrationTest EXIT");
     }

@@ -4,7 +4,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 
-public class SignUpPage extends HelloFreshBasePage {
+public class SignUpPage extends HelloFreshBasePage<SignUpPage> {
 
 
     public static final By FIRST_NAME_INPUT = By.id("first-name-input");

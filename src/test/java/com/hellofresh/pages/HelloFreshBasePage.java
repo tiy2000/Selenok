@@ -4,7 +4,7 @@ import base.BasePage;
 
 import java.util.concurrent.TimeUnit;
 
-public class HelloFreshBasePage extends BasePage {
+public class HelloFreshBasePage<T extends BasePage> extends BasePage<T> {
 
     static {
         setBaseUrl("https://www.hellofresh.com");
