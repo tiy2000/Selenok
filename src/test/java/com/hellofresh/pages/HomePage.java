@@ -2,12 +2,17 @@ package com.hellofresh.pages;
 
 import base.BasePage;
 import org.openqa.selenium.By;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class HomePage extends HelloFreshBasePage {
 
     public HomePage() {
         setPagePath("");
-        pageIdLocator = By.xpath("(//span[@data-translation-id='senf-navigation.login'])[2]");
+        setRightPageCondition(ExpectedConditions.presenceOfElementLocated(
+                By.xpath("(//span[@data-translation-id='senf-navigation.login'])[2]"))
+        );
+
+//        pageIdLocator = By.xpath("(//span[@data-translation-id='senf-navigation.login'])[2]");
 //        pageIdLocator = By.xpath("(//span[@data-translation-id='senf-navigation.login_INVALID_LOCATOR'])[2]");
     }
 

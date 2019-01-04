@@ -1,6 +1,7 @@
 package com.hellofresh.pages;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class LoginPage extends HelloFreshBasePage {
 
@@ -8,7 +9,9 @@ public class LoginPage extends HelloFreshBasePage {
 
     public LoginPage() {
         setPagePath("customer/account/login");
-        pageIdLocator = REGISTER_USER_LINK;
+        setRightPageCondition(ExpectedConditions.presenceOfElementLocated(REGISTER_USER_LINK));
+
+//        pageIdLocator = REGISTER_USER_LINK;
     }
 
     public static LoginPage openNewPage() {

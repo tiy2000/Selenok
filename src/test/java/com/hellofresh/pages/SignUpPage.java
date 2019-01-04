@@ -1,6 +1,7 @@
 package com.hellofresh.pages;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 
 public class SignUpPage extends HelloFreshBasePage {
@@ -18,7 +19,9 @@ public class SignUpPage extends HelloFreshBasePage {
 
 
     public SignUpPage() {
-        pageIdLocator = FIRST_NAME_INPUT;
+        setRightPageCondition(ExpectedConditions.presenceOfElementLocated(FIRST_NAME_INPUT));
+
+//        pageIdLocator = FIRST_NAME_INPUT;
     }
 
     public InvitePage fillRegistrationFields() {

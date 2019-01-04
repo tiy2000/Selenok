@@ -1,6 +1,7 @@
 package com.hellofresh.pages;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class InvitePage extends HelloFreshBasePage {
 
@@ -9,6 +10,8 @@ public class InvitePage extends HelloFreshBasePage {
 
 
     public InvitePage() {
-        pageIdLocator = BUTTON_SEND_INVITE;
+        setRightPageCondition(ExpectedConditions.presenceOfElementLocated(BUTTON_SEND_INVITE));
+
+//        pageIdLocator = BUTTON_SEND_INVITE;
     }
 }
