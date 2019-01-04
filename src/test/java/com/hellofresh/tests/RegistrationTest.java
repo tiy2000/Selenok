@@ -4,7 +4,6 @@ import base.BaseTest;
 import com.hellofresh.pages.InvitePage;
 import com.hellofresh.pages.LoginPage;
 import com.hellofresh.pages.SignUpPage;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -44,7 +43,7 @@ public class RegistrationTest extends BaseTest {
 //    }
 
 //    @Test(dependsOnMethods = "directOpeningLoginPageTest")
-    @Test()
+//    @Test()
     public void goodRegistrationTest() {
         System.out.println("RegistrationTest.goodRegistrationTest ENTER");
         LoginPage loginPage = LoginPage.openNewPage();
@@ -55,13 +54,13 @@ public class RegistrationTest extends BaseTest {
 
         signUpPage
                 .selectGender("male")
-                .clearAndFillFirstName("Alex")
-                .clearAndFillLastName("Bow")
-                .clearAndFillEmail("qwerty57@nono.to")
-                .clearAndFillPassword("12345678")
-                .clearAndFillMonth("12")
-                .clearAndFillDay("20")
-                .clearAndFillYear("2000");
+                .enterFirstName("Alex")
+                .enterLastName("Bow")
+                .enterFillEmail("qwerty57@nono.to")
+                .enterPassword("12345678")
+                .enterMonth("12")
+                .enterDay("20")
+                .enterYear("2000");
 
         InvitePage invitePage = signUpPage.clickRegistrationButton();
 
@@ -80,13 +79,13 @@ public class RegistrationTest extends BaseTest {
                     // Working with SignUpPage
                     .validateIsRightPage()
                     .selectGender("male")
-                    .clearAndFillFirstName("Alex")
-                    .clearAndFillLastName("Bow")
-                    .clearAndFillEmail("qwerty57@nono.to")
-                    .clearAndFillPassword("12345678")
-                    .clearAndFillMonth("12")
-                    .clearAndFillDay("20")
-                    .clearAndFillYear("2000")
+                    .enterFirstName("Alex")
+                    .enterLastName("Bow")
+                    .enterFillEmail("qwerty57@nono.to")
+                    .enterPassword("12345678")
+                    .enterMonth("12")
+                    .enterDay("20")
+                    .enterYear("2000")
                     .clickRegistrationButton()
                         // Working with InvitePage
                         .assertRightPage();

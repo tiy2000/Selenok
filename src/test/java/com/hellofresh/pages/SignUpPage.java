@@ -1,5 +1,6 @@
 package com.hellofresh.pages;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
@@ -44,46 +45,55 @@ public class SignUpPage extends HelloFreshBasePage<SignUpPage> {
 
     }
 
+    @Step
     public InvitePage clickRegistrationButton() {
         click(REGISTRATION_BUTTON);
         return new InvitePage();
     }
 
-    public SignUpPage clearAndFillFirstName(String firstName) {
+    @Step
+    public SignUpPage enterFirstName(String firstName) {
         clearAndFill(FIRST_NAME_INPUT, firstName);
         return this;
     }
 
-    public SignUpPage clearAndFillLastName(String lastName) {
+    @Step
+    public SignUpPage enterLastName(String lastName) {
         clearAndFill(LAST_NAME_INPUT, lastName);
         return this;
     }
 
-    public SignUpPage clearAndFillEmail(String email) {
+    @Step
+    public SignUpPage enterFillEmail(String email) {
         clearAndFill(EMAIL_INPUT, email);
         return this;
     }
 
-    public SignUpPage clearAndFillPassword(String password) {
+    @Step
+    public SignUpPage enterPassword(String password) {
         clearAndFill(PASSWORD_INPUT, password);
         return this;
     }
 
-    public SignUpPage clearAndFillMonth(String month) {
+    @Step
+    public SignUpPage enterMonth(String month) {
         clearAndFill(MONTH_INPUT, month);
         return this;
     }
 
-    public SignUpPage clearAndFillDay(String day) {
+    @Step
+    public SignUpPage enterDay(String day) {
         clearAndFill(DAY_INPUT, day);
         return this;
     }
 
-    public SignUpPage clearAndFillYear(String year) {
+    @Step
+    public SignUpPage enterYear(String year) {
         clearAndFill(YEAR_INPUT, year);
         return this;
     }
 
+    @Step
     public SignUpPage selectGender(String gender) {
         selectByValue(GENDER_SELECT_INPUT, gender);
         return this;
