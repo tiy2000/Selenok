@@ -10,9 +10,9 @@ import org.testng.annotations.*;
 import java.io.File;
 
 @Listeners(ScreenshotListener.class)
-public class BaseTest {
+public abstract class BaseTest {
 
-    private static final ThreadLocal<WebDriver> driverThreadLocal = new ThreadLocal<>();
+//    private static final ThreadLocal<WebDriver> driverThreadLocal = new ThreadLocal<>();
 
     public enum AutoTearDown {NONE, AFTER_METHOD, AFTER_CLASS}
     private AutoTearDown autoTearDown = AutoTearDown.NONE;
@@ -21,11 +21,56 @@ public class BaseTest {
 
     // ===== Working with WebDriver instance =====
 
-    public AutoTearDown getAutoTearDown() {
+    private void setDriver(WebDriver driver) {
+        System.out.println("BaseTest.setDriver ENTER");
+//        driverThreadLocal.set(driver);
+//        BasePage.setDriver(driver);
+        BasePage.driverThreadLocal.set(driver);
+        System.out.println("BaseTest.setDriver EXIT");
+    }
+
+    private void removeDriver() {
+        System.out.println("BaseTest.removeDriver ENTER");
+//        driverThreadLocal.remove();
+//        BasePage.removeDriver();
+        BasePage.driverThreadLocal.remove();
+        System.out.println("BaseTest.removeDriver EXIT");
+    }
+
+    protected static WebDriver getDriver() {
+        return BasePage.getDriver();
+//        return driverThreadLocal.get();
+    }
+
+    protected static boolean isDriverCreated() {
+        return getDriver() != null;
+    }
+
+
+    protected void tearDownDriver() {
+        System.out.println("BaseTest.tearDownDriver ENTER");
+        if (isDriverCreated()) {
+            getDriver().quit();
+            removeDriver();
+        }
+        System.out.println("BaseTest.tearDownDriver EXIT");
+    }
+
+    protected void createChromeWebDriver(AutoTearDown autoTearDown) {
+        this.autoTearDown = autoTearDown;
+        WebDriver driver = new ChromeDriver();
+        setDriver(driver);
+    }
+
+
+
+    // ===== Auto tearDown driver =====
+
+    protected AutoTearDown getAutoTearDown() {
         return autoTearDown;
     }
 
-    public void setAutoTearDown(AutoTearDown autoTearDown) {
+    protected void setAutoTearDown(AutoTearDown autoTearDown) {
         this.autoTearDown = autoTearDown;
     }
 
@@ -45,48 +90,12 @@ public class BaseTest {
         }
     }
 
-    private void setDriver(WebDriver driver) {
-        System.out.println("BaseTest.setDriver ENTER");
-        driverThreadLocal.set(driver);
-        BasePage.setDriver(driver);
-        System.out.println("BaseTest.setDriver EXIT");
-    }
 
-    private void resetDriver() {
-        System.out.println("BaseTest.resetDriver ENTER");
-        driverThreadLocal.remove();
-        BasePage.resetDriver();
-        System.out.println("BaseTest.resetDriver EXIT");
-    }
-
-    public static WebDriver getDriver() {
-        return driverThreadLocal.get();
-    }
-
-    public static boolean isDriverCreated() {
-        return getDriver() != null;
-    }
-
-
-    public void tearDownDriver() {
-        System.out.println("BaseTest.tearDownDriver ENTER");
-        if (isDriverCreated()) {
-            getDriver().quit();
-            resetDriver();
-        }
-        System.out.println("BaseTest.tearDownDriver EXIT");
-    }
-
-    public void createChromeWebDriver(AutoTearDown autoTearDown) {
-        this.autoTearDown = autoTearDown;
-        WebDriver driver = new ChromeDriver();
-        setDriver(driver);
-    }
 
 
     // ===== Getting screenshot =====
 
-    public static byte[] getScreenShotAsBytes() {
+    protected static byte[] getScreenShotAsBytes() {
         try {
             return ((TakesScreenshot) getDriver()).getScreenshotAs(OutputType.BYTES);
         } catch (SessionNotCreatedException e) {
@@ -96,7 +105,7 @@ public class BaseTest {
         return null;
     }
 
-    public static File getScreenShotAsFiles() {
+    protected static File getScreenShotAsFiles() {
         try {
             return ((TakesScreenshot) getDriver()).getScreenshotAs(OutputType.FILE);
         } catch (SessionNotCreatedException e) {
