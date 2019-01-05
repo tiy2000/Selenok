@@ -13,40 +13,35 @@ import java.time.Duration;
 
 public class BasePage<T extends BasePage> {
 
-    private static final ThreadLocal<WebDriver> driverThreadLocal = new ThreadLocal<>();
+    static final ThreadLocal<WebDriver> driverThreadLocal = new ThreadLocal<>();
 
     private int defaultTimeOutInSeconds = 15;
-    private WebDriverWait wait;
+    private WebDriverWait wait = new WebDriverWait(getDriver(), defaultTimeOutInSeconds);
 
-//    protected By pageIdLocator = null;
     private ExpectedCondition<WebElement> rightPageCondition;
 
     private static String BASE_URL;
     private String pagePath;
 
 
-    public BasePage() {
-        wait = new WebDriverWait(getDriver(), defaultTimeOutInSeconds);
-    }
-
 
 // ===== Working with WebDriver instance =====
 
-    static void setDriver(WebDriver driver) {
-        driverThreadLocal.set(driver);
-    }
-
-    static void resetDriver() {
-        driverThreadLocal.remove();
-    }
-
-    public static WebDriver getDriver() {
+    protected static WebDriver getDriver() {
         return driverThreadLocal.get();
     }
 
-    public static boolean isDriverCreated() {
-        return getDriver() != null;
-    }
+//    static void setDriver(WebDriver driver) {
+//        driverThreadLocal.set(driver);
+//    }
+//
+//    static void resetDriver() {
+//        driverThreadLocal.remove();
+//    }
+//
+//    public static boolean isDriverCreated() {
+//        return getDriver() != null;
+//    }
 
 
 
