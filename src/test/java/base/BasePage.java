@@ -11,7 +11,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 
-public class BasePage<T extends BasePage> {
+public abstract class BasePage<T extends BasePage> {
 
     static final ThreadLocal<WebDriver> driverThreadLocal = new ThreadLocal<>();
 
@@ -25,58 +25,15 @@ public class BasePage<T extends BasePage> {
 
 
 
-// ===== Working with WebDriver instance =====
+    // ===== Working with WebDriver instance =====
 
     protected static WebDriver getDriver() {
         return driverThreadLocal.get();
     }
 
-//    static void setDriver(WebDriver driver) {
-//        driverThreadLocal.set(driver);
-//    }
-//
-//    static void resetDriver() {
-//        driverThreadLocal.remove();
-//    }
-//
-//    public static boolean isDriverCreated() {
-//        return getDriver() != null;
-//    }
 
 
-
-    // ===== Waiting for elements
-
-    public WebElement wait(By by) throws TimeoutException {
-        System.out.println("BasePage.wait ENTER, BY: " + by.toString());
-
-//        WebElement element = wait.withTimeout(Duration.ofSeconds(defaultTimeOutInSeconds))
-//                .until(driver -> driver.findElement(by));
-        WebElement element = wait.withTimeout(Duration.ofSeconds(defaultTimeOutInSeconds))
-                .until(ExpectedConditions.presenceOfElementLocated(by));
-
-        System.out.println("BasePage.wait EXIT");
-        return element;
-    }
-
-    public WebElement wait(ExpectedCondition<WebElement> condition) throws TimeoutException {
-        System.out.println("BasePage.waitByCondition ENTER, BY: " + condition.toString());
-
-        WebElement element = wait.withTimeout(Duration.ofSeconds(defaultTimeOutInSeconds))
-                .until(condition);
-
-        System.out.println("BasePage.waitByCondition EXIT");
-        return element;
-    }
-
-//    public void waitElementDisplayed(By by) throws TimeoutException {
-//        System.out.println("BasePage.waitElementDisplayed ENTER, BY: " + by.toString());
-//
-//        wait.withTimeout(Duration.ofSeconds(defaultTimeOutInSeconds))
-//                .until(driver -> driver.findElement(by).isDisplayed());
-//
-//        System.out.println("BasePage.waitElementDisplayed EXIT");
-//    }
+    // ===== Waiting elements and page conditions =====
 
     public int getDefaultTimeOutInSeconds() {
         return defaultTimeOutInSeconds;
@@ -87,15 +44,45 @@ public class BasePage<T extends BasePage> {
         return (T)this;
     }
 
+    public WebElement waitElement(By by) throws TimeoutException {
+        System.out.println("BasePage.waitElement ENTER, BY: " + by.toString());
+
+        WebElement element = wait
+                .withTimeout(Duration.ofSeconds(defaultTimeOutInSeconds))
+                .until(ExpectedConditions.presenceOfElementLocated(by));
+
+        System.out.println("BasePage.waitElement EXIT");
+        return element;
+    }
+
+    public WebElement waitElement(ExpectedCondition<WebElement> condition) throws TimeoutException {
+        System.out.println("BasePage.waitByCondition ENTER, BY: " + condition.toString());
+
+        WebElement element = wait
+                .withTimeout(Duration.ofSeconds(defaultTimeOutInSeconds))
+                .until(condition);
+
+        System.out.println("BasePage.waitByCondition EXIT");
+        return element;
+    }
+
+    public T waitCondition(ExpectedCondition<WebElement> condition) throws TimeoutException {
+        System.out.println("BasePage.waitCondition ENTER, BY: " + condition.toString());
+
+        wait.withTimeout(Duration.ofSeconds(defaultTimeOutInSeconds))
+                .until(condition);
+
+        System.out.println("BasePage.waitCondition EXIT");
+        return (T)this;
+    }
+
 
 
 
     // ===== Working with Web elements =====
 
     public WebElement findElement(By by) {
-        WebElement element = wait(by);
-        return element;
-//        return getDriver().findElement(by);
+        return waitElement(by);
     }
 
     protected T sendKeys(By by, CharSequence...charSequences) {
@@ -148,7 +135,7 @@ public class BasePage<T extends BasePage> {
     public boolean isRightPage() throws InvalidUsageOrConfig {
         if (rightPageCondition != null) {
             try {
-                wait(rightPageCondition);
+                waitElement(rightPageCondition);
             } catch (TimeoutException e) {
                 return false;
             }

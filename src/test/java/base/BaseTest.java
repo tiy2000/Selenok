@@ -12,8 +12,6 @@ import java.io.File;
 @Listeners(ScreenshotListener.class)
 public abstract class BaseTest {
 
-//    private static final ThreadLocal<WebDriver> driverThreadLocal = new ThreadLocal<>();
-
     public enum AutoTearDown {NONE, AFTER_METHOD, AFTER_CLASS}
     private AutoTearDown autoTearDown = AutoTearDown.NONE;
 
@@ -23,23 +21,18 @@ public abstract class BaseTest {
 
     private void setDriver(WebDriver driver) {
         System.out.println("BaseTest.setDriver ENTER");
-//        driverThreadLocal.set(driver);
-//        BasePage.setDriver(driver);
         BasePage.driverThreadLocal.set(driver);
         System.out.println("BaseTest.setDriver EXIT");
     }
 
     private void removeDriver() {
         System.out.println("BaseTest.removeDriver ENTER");
-//        driverThreadLocal.remove();
-//        BasePage.removeDriver();
         BasePage.driverThreadLocal.remove();
         System.out.println("BaseTest.removeDriver EXIT");
     }
 
     protected static WebDriver getDriver() {
         return BasePage.getDriver();
-//        return driverThreadLocal.get();
     }
 
     protected static boolean isDriverCreated() {
