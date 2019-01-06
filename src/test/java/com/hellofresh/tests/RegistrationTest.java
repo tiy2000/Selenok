@@ -19,7 +19,7 @@ public class RegistrationTest extends BaseTest {
         createChromeWebDriver(AutoTearDown.AFTER_METHOD);
     }
 
-//    @Test
+    @Test
     public void directOpeningLoginPageTest() {
         System.out.println("RegistrationTest.directOpeningLoginPageTest ENTER");
         LoginPage loginPage = LoginPage.openNewPage();
