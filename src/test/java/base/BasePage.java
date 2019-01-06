@@ -14,16 +14,17 @@ import java.time.Duration;
 public abstract class BasePage<T extends BasePage> {
 
 
-    // ===== Working with WebDriver instance =====
+    //region ===== Working with WebDriver instance =====
 
     static final ThreadLocal<WebDriver> driverThreadLocal = new ThreadLocal<>();
+
     protected static WebDriver getDriver() {
         return driverThreadLocal.get();
     }
+    //endregion
 
 
-
-    // ===== Waiting elements and page conditions =====
+    //region ===== Waiting elements and page conditions =====
 
     private int defaultTimeOutInSeconds = 15;
     private WebDriverWait wait = new WebDriverWait(getDriver(), defaultTimeOutInSeconds);
@@ -34,7 +35,7 @@ public abstract class BasePage<T extends BasePage> {
 
     public T setDefaultTimeOutInSeconds(int defaultTimeOutInSeconds) {
         this.defaultTimeOutInSeconds = defaultTimeOutInSeconds;
-        return (T)this;
+        return (T) this;
     }
 
     public WebElement waitElement(By by) throws TimeoutException {
@@ -66,27 +67,27 @@ public abstract class BasePage<T extends BasePage> {
                 .until(condition);
 
         System.out.println("BasePage.waitCondition EXIT");
-        return (T)this;
+        return (T) this;
     }
+    //endregion
 
 
-
-    // ===== Working with Web elements =====
+    //region ===== Working with Web elements =====
 
     public WebElement findElement(By by) {
         return waitElement(by);
     }
 
-    protected T sendKeys(By by, CharSequence...charSequences) {
+    protected T sendKeys(By by, CharSequence... charSequences) {
         findElement(by).sendKeys(charSequences);
-        return (T)this;
+        return (T) this;
     }
 
     protected T clearAndFill(By by, CharSequence... charSequences) {
         WebElement element = findElement(by);
         element.clear();
         element.sendKeys(charSequences);
-        return (T)this;
+        return (T) this;
     }
 
     public T enterInputValue(By by, CharSequence... charSequences) {
@@ -95,24 +96,24 @@ public abstract class BasePage<T extends BasePage> {
 
     public T click(By by) {
         findElement(by).click();
-        return (T)this;
+        return (T) this;
     }
 
     public T selectByValue(By by, String value) {
         Select select = new Select(findElement(by));
         select.selectByValue(value);
-        return (T)this;
+        return (T) this;
     }
 
     public T selectByIndex(By by, int index) {
         Select select = new Select(findElement(by));
         select.selectByIndex(index);
-        return (T)this;
+        return (T) this;
     }
+    //endregion
 
 
-
-    // ===== Right page validation =====
+    //region ===== Right page validation =====
 
     private ExpectedCondition<WebElement> rightPageCondition;
 
@@ -122,7 +123,7 @@ public abstract class BasePage<T extends BasePage> {
 
     protected T setRightPageCondition(ExpectedCondition<WebElement> rightPageCondition) {
         this.rightPageCondition = rightPageCondition;
-        return (T)this;
+        return (T) this;
     }
 
     public boolean isRightPage() throws InvalidUsageOrConfig {
@@ -146,7 +147,7 @@ public abstract class BasePage<T extends BasePage> {
             throw new InvalidPageStateException(makeMessage());
         }
         System.out.println("BasePage.validateIsRightPage EXIT (PASS)");
-        return (T)this;
+        return (T) this;
     }
 
     public T assertRightPage() throws AssertionError {
@@ -156,7 +157,7 @@ public abstract class BasePage<T extends BasePage> {
             throw new AssertionError(makeMessage());
         }
         System.out.println("BasePage.assertRightPage ENTER (PASS)");
-        return (T)this;
+        return (T) this;
     }
 
     private String makeMessage() {
@@ -172,17 +173,17 @@ public abstract class BasePage<T extends BasePage> {
                 .append("\n");
         return sb.toString();
     }
+    //endregion
 
 
-
-    // ===== Opening pages =====
+    //region ===== Opening pages =====
 
     private static String BASE_URL;
     private String pagePath;
 
     public T openPage() {
         getDriver().get(getFullPagePath());
-        return (T)this;
+        return (T) this;
     }
 
     public String getFullPagePath() {
@@ -208,5 +209,6 @@ public abstract class BasePage<T extends BasePage> {
     protected static void setBaseUrl(String baseUrl) {
         BASE_URL = baseUrl;
     }
+    //endregion
 
 }
