@@ -8,7 +8,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 public class LoginPage extends HelloFreshBasePage<LoginPage> {
 
     @PagePath
-    private static final String path = "customer/account";
+    private static final String PATH = "customer/account";
 
     @PageId
     public static final By REGISTER_USER_LINK = By.id("register-user-link");
