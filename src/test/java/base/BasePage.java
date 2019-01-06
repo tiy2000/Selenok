@@ -13,20 +13,10 @@ import java.time.Duration;
 
 public abstract class BasePage<T extends BasePage> {
 
-    static final ThreadLocal<WebDriver> driverThreadLocal = new ThreadLocal<>();
-
-    private int defaultTimeOutInSeconds = 15;
-    private WebDriverWait wait = new WebDriverWait(getDriver(), defaultTimeOutInSeconds);
-
-    private ExpectedCondition<WebElement> rightPageCondition;
-
-    private static String BASE_URL;
-    private String pagePath;
-
-
 
     // ===== Working with WebDriver instance =====
 
+    static final ThreadLocal<WebDriver> driverThreadLocal = new ThreadLocal<>();
     protected static WebDriver getDriver() {
         return driverThreadLocal.get();
     }
@@ -34,6 +24,9 @@ public abstract class BasePage<T extends BasePage> {
 
 
     // ===== Waiting elements and page conditions =====
+
+    private int defaultTimeOutInSeconds = 15;
+    private WebDriverWait wait = new WebDriverWait(getDriver(), defaultTimeOutInSeconds);
 
     public int getDefaultTimeOutInSeconds() {
         return defaultTimeOutInSeconds;
@@ -78,7 +71,6 @@ public abstract class BasePage<T extends BasePage> {
 
 
 
-
     // ===== Working with Web elements =====
 
     public WebElement findElement(By by) {
@@ -90,15 +82,15 @@ public abstract class BasePage<T extends BasePage> {
         return (T)this;
     }
 
-    public T enterInputValue(By by, CharSequence... charSequences) {
-        return clearAndFill(by, charSequences);
-    }
-
     protected T clearAndFill(By by, CharSequence... charSequences) {
         WebElement element = findElement(by);
         element.clear();
         element.sendKeys(charSequences);
         return (T)this;
+    }
+
+    public T enterInputValue(By by, CharSequence... charSequences) {
+        return clearAndFill(by, charSequences);
     }
 
     public T click(By by) {
@@ -122,6 +114,7 @@ public abstract class BasePage<T extends BasePage> {
 
     // ===== Right page validation =====
 
+    private ExpectedCondition<WebElement> rightPageCondition;
 
     protected ExpectedCondition<WebElement> getRightPageCondition() {
         return rightPageCondition;
@@ -135,7 +128,7 @@ public abstract class BasePage<T extends BasePage> {
     public boolean isRightPage() throws InvalidUsageOrConfig {
         if (rightPageCondition != null) {
             try {
-                waitElement(rightPageCondition);
+                waitCondition(rightPageCondition);
             } catch (TimeoutException e) {
                 return false;
             }
@@ -150,7 +143,7 @@ public abstract class BasePage<T extends BasePage> {
         System.out.println("BasePage.validateIsRightPage ENTER");
         if (!isRightPage()) {
             System.out.println("BasePage.validateIsRightPage EXIT (FAIL)");
-            throw new InvalidPageStateException(makeMessage().toString());
+            throw new InvalidPageStateException(makeMessage());
         }
         System.out.println("BasePage.validateIsRightPage EXIT (PASS)");
         return (T)this;
@@ -160,13 +153,13 @@ public abstract class BasePage<T extends BasePage> {
         System.out.println("BasePage.assertRightPage ENTER");
         if (!isRightPage()) {
             System.out.println("BasePage.assertRightPage ENTER (FAIL)");
-            throw new AssertionError(makeMessage().toString());
+            throw new AssertionError(makeMessage());
         }
         System.out.println("BasePage.assertRightPage ENTER (PASS)");
         return (T)this;
     }
 
-    private StringBuilder makeMessage() {
+    private String makeMessage() {
         StringBuilder sb = new StringBuilder();
         sb
                 .append("Current page is not '")
@@ -177,12 +170,15 @@ public abstract class BasePage<T extends BasePage> {
                 .append("\ncurrent url: ")
                 .append(getDriver().getCurrentUrl())
                 .append("\n");
-        return sb;
+        return sb.toString();
     }
 
 
 
     // ===== Opening pages =====
+
+    private static String BASE_URL;
+    private String pagePath;
 
     public T openPage() {
         getDriver().get(getFullPagePath());
