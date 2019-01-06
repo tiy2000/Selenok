@@ -13,6 +13,10 @@ import java.time.Duration;
 
 public abstract class BasePage<T extends BasePage> {
 
+    public BasePage() {
+        parseAnnotations();
+    }
+
 
     //region ===== Working with WebDriver instance =====
 
