@@ -15,11 +15,11 @@ import java.io.File;
 public abstract class BaseTest {
 
     public enum AutoTearDown {NONE, AFTER_METHOD, AFTER_CLASS}
+
     private AutoTearDown autoTearDown = AutoTearDown.NONE;
 
 
-
-    // ===== Working with WebDriver instance =====
+    //region ===== Working with WebDriver instance =====
 
     private void setDriver(WebDriver driver) {
         System.out.println("BaseTest.setDriver ENTER");
@@ -56,10 +56,10 @@ public abstract class BaseTest {
         WebDriver driver = new ChromeDriver();
         setDriver(driver);
     }
+    //endregion
 
 
-
-    // ===== Auto tearDown driver =====
+    //region ===== Auto tearDown driver =====
 
     protected AutoTearDown getAutoTearDown() {
         return autoTearDown;
@@ -84,11 +84,10 @@ public abstract class BaseTest {
             tearDownDriver();
         }
     }
+    //endregion
 
 
-
-
-    // ===== Getting screenshot =====
+    //region ===== Getting screenshot =====
 
     protected static byte[] getScreenShotAsBytes() {
         try {
@@ -109,6 +108,7 @@ public abstract class BaseTest {
         }
         return null;
     }
+    //endregion
 
 
 }
