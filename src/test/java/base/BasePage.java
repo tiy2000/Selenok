@@ -181,8 +181,12 @@ public abstract class BasePage<T extends BasePage> {
     private static String BASE_URL;
     private String pagePath;
 
-    public T openPage() {
-        getDriver().get(getFullPagePath());
+    public T openPage() throws InvalidUsageOrConfig {
+        if (BASE_URL != null & pagePath != null) {
+            getDriver().get(getFullPagePath());
+        } else {
+            throw new InvalidUsageOrConfig("To open page BASE_URI and pagePath should be assigned");
+        }
         return (T) this;
     }
 
@@ -210,5 +214,13 @@ public abstract class BasePage<T extends BasePage> {
         BASE_URL = baseUrl;
     }
     //endregion
+
+
+    private void parseAnnotations() {
+        AnnotationParser parser = new AnnotationParser();
+        parser.parse(this);
+        pagePath = parser.pagePath;
+        rightPageCondition = parser.rightPageCondition;
+    }
 
 }
