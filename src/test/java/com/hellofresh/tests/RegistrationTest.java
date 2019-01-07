@@ -93,4 +93,29 @@ public class RegistrationTest extends BaseTest {
         System.out.println("RegistrationTest.goodRegistrationTest EXIT");
     }
 
+    @Test()
+    public void autoPageOpenRegistrationTest() {
+        System.out.println("RegistrationTest.autoPageOpenRegistrationTest ENTER");
+
+        given()
+                .<LoginPage>openNewPage(LoginPage.class)
+                .validateIsRightPage()
+                .clickRegisterUserLink()
+                    // Working with SignUpPage
+                    .validateIsRightPage()
+                    .selectGender("male")
+                    .enterFirstName("Alex")
+                    .enterLastName("Bow")
+                    .enterFillEmail("qwerty57@nono.to")
+                    .enterPassword("12345678")
+                    .enterMonth("12")
+                    .enterDay("20")
+                    .enterYear("2000")
+                    .clickRegistrationButton()
+                        // Working with InvitePage
+                        .assertRightPage();
+
+        System.out.println("RegistrationTest.autoPageOpenRegistrationTest EXIT");
+    }
+
 }
