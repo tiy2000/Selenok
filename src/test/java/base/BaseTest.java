@@ -111,4 +111,23 @@ public abstract class BaseTest {
     //endregion
 
 
+    //region ===== Opening pages =====
+
+    protected BaseTest given() {
+        return this;
+    }
+
+    public  <T extends BasePage> T openNewPage(Class<? extends BasePage> pageClass) throws InvalidUsageOrConfig {
+        T newPage = null;
+        try {
+            newPage = (T) pageClass.newInstance();
+            newPage.openPage();
+        } catch (InstantiationException | IllegalAccessException e) {
+            throw new InvalidUsageOrConfig(e.getMessage());
+        }
+        return newPage;
+    }
+    //endregion
+
+
 }
