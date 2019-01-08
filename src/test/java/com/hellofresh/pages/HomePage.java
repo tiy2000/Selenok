@@ -7,7 +7,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 public class HomePage extends HelloFreshBasePage<HomePage> {
 
     public HomePage() {
-        setPagePath("");
+        setPagePath("/");
         setRightPageCondition(ExpectedConditions.presenceOfElementLocated(
                 By.xpath("(//span[@data-translation-id='senf-navigation.login'])[2]"))
         );
