@@ -94,8 +94,8 @@ public class RegistrationTest extends BaseTest {
     }
 
     @Test()
-    public void autoPageOpenRegistrationTest() {
-        System.out.println("RegistrationTest.autoPageOpenRegistrationTest ENTER");
+    public void smartPageOpeningRegistrationTest() {
+        System.out.println("RegistrationTest.smartPageOpeningRegistrationTest ENTER");
 
         given()
                 .<LoginPage>openNewPage(LoginPage.class)
@@ -115,7 +115,34 @@ public class RegistrationTest extends BaseTest {
                         // Working with InvitePage
                         .assertRightPage();
 
-        System.out.println("RegistrationTest.autoPageOpenRegistrationTest EXIT");
+        System.out.println("RegistrationTest.smartPageOpeningRegistrationTest EXIT");
+    }
+
+    @Test()
+    public void bdd2RegistrationTest() {
+        System.out.println("RegistrationTest.smartPageOpeningRegistrationTest ENTER");
+
+        given()
+                .<LoginPage>openNewPage(LoginPage.class)
+                .validateIsRightPage()
+                .clickRegisterUserLink()
+                    // Working with SignUpPage
+                    .validateIsRightPage()
+        .when()
+                    .selectGender("male")
+                    .enterFirstName("Alex")
+                    .enterLastName("Bow")
+                    .enterFillEmail("qwerty57@nono.to")
+                    .enterPassword("12345678")
+                    .enterMonth("12")
+                    .enterDay("20")
+                    .enterYear("2000")
+                    .clickRegistrationButton()
+                        // Working with InvitePage
+        .then()
+                        .assertRightPage();
+
+        System.out.println("RegistrationTest.smartPageOpeningRegistrationTest EXIT");
     }
 
 }
