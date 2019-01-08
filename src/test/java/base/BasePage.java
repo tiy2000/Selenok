@@ -196,7 +196,7 @@ public abstract class BasePage<T extends BasePage> {
 
     public String getFullPagePath() {
         String fullPath = getBaseUrl();
-        if (!fullPath.endsWith("/") && !getPagePath().endsWith("/")) {
+        if (!fullPath.endsWith("/") && !getPagePath().startsWith("/")) {
             fullPath += "/";
         }
         return fullPath + getPagePath();
@@ -220,11 +220,33 @@ public abstract class BasePage<T extends BasePage> {
     //endregion
 
 
+    //region ===== Working with annotations =====
     private void parseAnnotations() {
         AnnotationParser parser = new AnnotationParser();
         parser.parse(this);
         pagePath = parser.pagePath;
         rightPageCondition = parser.rightPageCondition;
     }
+    //endregion
+
+
+    //region ===== Syntax sugar =====
+    public T testScenario() {
+        return (T) this;
+    }
+
+    public T then() {
+        return (T) this;
+    }
+
+    public T when() {
+        return (T) this;
+    }
+
+    public T and() {
+        return (T) this;
+    }
+    //endregion
+
 
 }
