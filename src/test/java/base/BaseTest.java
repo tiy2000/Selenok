@@ -113,10 +113,6 @@ public abstract class BaseTest {
 
     //region ===== Opening pages =====
 
-    protected BaseTest given() {
-        return this;
-    }
-
     public  <T extends BasePage> T openNewPage(Class<? extends BasePage> pageClass) throws InvalidUsageOrConfig {
         T newPage = null;
         try {
@@ -129,5 +125,12 @@ public abstract class BaseTest {
     }
     //endregion
 
+
+    //region ===== Syntax sugar =====
+
+    protected BaseTest given() {
+        return this;
+    }
+    //endregion
 
 }
