@@ -82,13 +82,13 @@ public abstract class BasePage<T extends BasePage> {
         return waitElement(by);
     }
 
-    protected T sendKeys(By by, CharSequence... charSequences) {
+    private T sendKeys(By by, CharSequence... charSequences) {
         findElement(by).sendKeys(charSequences);
         return (T) this;
     }
 
-    protected T clearAndFill(By by, CharSequence... charSequences) {
-        WebElement element = findElement(by);
+    private T clearAndFill(By by, CharSequence... charSequences) {
+        WebElement element = waitElement(ExpectedConditions.visibilityOfElementLocated(by));
         element.clear();
         element.sendKeys(charSequences);
         return (T) this;
@@ -99,18 +99,18 @@ public abstract class BasePage<T extends BasePage> {
     }
 
     public T click(By by) {
-        findElement(by).click();
+        waitElement(ExpectedConditions.elementToBeClickable(by)).click();
         return (T) this;
     }
 
     public T selectByValue(By by, String value) {
-        Select select = new Select(findElement(by));
+        Select select = new Select(waitElement(ExpectedConditions.visibilityOfElementLocated(by)));
         select.selectByValue(value);
         return (T) this;
     }
 
     public T selectByIndex(By by, int index) {
-        Select select = new Select(findElement(by));
+        Select select = new Select(waitElement(ExpectedConditions.visibilityOfElementLocated(by)));
         select.selectByIndex(index);
         return (T) this;
     }
