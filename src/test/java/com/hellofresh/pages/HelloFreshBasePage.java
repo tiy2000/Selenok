@@ -2,6 +2,7 @@ package com.hellofresh.pages;
 
 import base.BasePage;
 import base.InvalidPageStateException;
+import base.InvalidUsageOrConfig;
 import io.qameta.allure.Step;
 
 import java.util.concurrent.TimeUnit;

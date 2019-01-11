@@ -1,5 +1,6 @@
 package com.hellofresh.pages;
 
+import base.annotations.PageId;
 import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -7,7 +8,7 @@ import org.openqa.selenium.support.ui.Select;
 
 public class SignUpPage extends HelloFreshBasePage<SignUpPage> {
 
-
+    @PageId
     public static final By FIRST_NAME_INPUT = By.id("first-name-input");
     public static final By LAST_NAME_INPUT = By.id("last-name-input");
     public static final By EMAIL_INPUT = By.id("email-input");
@@ -20,7 +21,7 @@ public class SignUpPage extends HelloFreshBasePage<SignUpPage> {
 
 
     public SignUpPage() {
-        setRightPageCondition(ExpectedConditions.presenceOfElementLocated(FIRST_NAME_INPUT));
+//        setRightPageCondition(ExpectedConditions.presenceOfElementLocated(FIRST_NAME_INPUT));
 
 //        pageIdLocator = FIRST_NAME_INPUT;
     }
@@ -53,43 +54,43 @@ public class SignUpPage extends HelloFreshBasePage<SignUpPage> {
 
     @Step
     public SignUpPage enterFirstName(String firstName) {
-        clearAndFill(FIRST_NAME_INPUT, firstName);
+        enterInputValue(FIRST_NAME_INPUT, firstName);
         return this;
     }
 
     @Step
     public SignUpPage enterLastName(String lastName) {
-        clearAndFill(LAST_NAME_INPUT, lastName);
+        enterInputValue(LAST_NAME_INPUT, lastName);
         return this;
     }
 
     @Step
     public SignUpPage enterFillEmail(String email) {
-        clearAndFill(EMAIL_INPUT, email);
+        enterInputValue(EMAIL_INPUT, email);
         return this;
     }
 
     @Step
     public SignUpPage enterPassword(String password) {
-        clearAndFill(PASSWORD_INPUT, password);
+        enterInputValue(PASSWORD_INPUT, password);
         return this;
     }
 
     @Step
     public SignUpPage enterMonth(String month) {
-        clearAndFill(MONTH_INPUT, month);
+        enterInputValue(MONTH_INPUT, month);
         return this;
     }
 
     @Step
     public SignUpPage enterDay(String day) {
-        clearAndFill(DAY_INPUT, day);
+        enterInputValue(DAY_INPUT, day);
         return this;
     }
 
     @Step
     public SignUpPage enterYear(String year) {
-        clearAndFill(YEAR_INPUT, year);
+        enterInputValue(YEAR_INPUT, year);
         return this;
     }
 

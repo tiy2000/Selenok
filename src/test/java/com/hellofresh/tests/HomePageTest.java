@@ -19,7 +19,7 @@ public class HomePageTest extends BaseTest {
 //        tearDownDriver();
 //    }
 
-//    @Test
+    @Test
     public void homePageTest() {
         HomePage homePage = HomePage.openNewPage();
 
