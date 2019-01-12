@@ -179,6 +179,25 @@ public abstract class BasePage<T extends BasePage> {
     }
     //endregion
 
+    //region ===== Assertions =====
+    public T assertThan(ExpectedCondition expectedCondition) throws AssertionError {
+        try {
+            waitElement(expectedCondition);
+        } catch (TimeoutException e) {
+            StringBuilder sb = new StringBuilder();
+            sb.append("Element condition violation\n")
+                    .append("Expected: ")
+                    .append(expectedCondition.toString())
+                    .append("\n")
+                    .append("Actual: ")
+                    .append(e.getMessage())
+                    .append("\n");
+            throw new AssertionError(sb.toString());
+        }
+        return (T) this;
+    }
+    //endregion
+
 
     //region ===== Opening pages =====
 
