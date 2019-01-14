@@ -27,7 +27,7 @@ public class HelloFreshBasePage<T extends BasePage> extends BasePage<T> {
 
     @Step
     @Override
-    public T assertRightPage() throws AssertionError {
-        return super.assertRightPage();
+    public T assertIsRightPage() throws AssertionError {
+        return super.assertIsRightPage();
     }
 }

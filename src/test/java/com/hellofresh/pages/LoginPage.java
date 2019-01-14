@@ -22,9 +22,9 @@ public class LoginPage extends HelloFreshBasePage<LoginPage> {
 
     public static LoginPage openNewPage() {
         LoginPage loginPage = new LoginPage();
-        System.out.println("*** Before opening LoginPage");
+//        System.out.println("*** Before opening LoginPage");
         loginPage.openPage();
-        System.out.println("*** After opening LoginPage");
+//        System.out.println("*** After opening LoginPage");
         return loginPage;
     }
 

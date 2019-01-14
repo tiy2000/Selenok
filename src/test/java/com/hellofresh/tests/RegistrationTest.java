@@ -16,14 +16,15 @@ public class RegistrationTest extends BaseTest {
 
     @BeforeMethod
     public void initBeforeMethod() {
-        createChromeWebDriver(AutoTearDown.AFTER_METHOD);
+//        createChromeWebDriver(AutoTearDown.AFTER_METHOD);
+        createChromeWebDriver();
     }
 
     @Test
     public void directOpeningLoginPageTest() {
         System.out.println("RegistrationTest.directOpeningLoginPageTest ENTER");
         LoginPage loginPage = LoginPage.openNewPage();
-        loginPage.assertRightPage();
+        loginPage.assertIsRightPage();
         System.out.println("RegistrationTest.directOpeningLoginPageTest EXIT");
     }
 
@@ -64,7 +65,7 @@ public class RegistrationTest extends BaseTest {
 
         InvitePage invitePage = signUpPage.clickRegistrationButton();
 
-        invitePage.assertRightPage();
+        invitePage.assertIsRightPage();
 
         System.out.println("RegistrationTest.goodRegistrationTest EXIT");
     }
@@ -88,7 +89,7 @@ public class RegistrationTest extends BaseTest {
                     .enterYear("2000")
                     .clickRegistrationButton()
                         // Working with InvitePage
-                        .assertRightPage();
+                        .assertIsRightPage();
 
         System.out.println("RegistrationTest.goodRegistrationTest EXIT");
     }
@@ -113,7 +114,7 @@ public class RegistrationTest extends BaseTest {
                     .enterYear("2000")
                     .clickRegistrationButton()
                         // Working with InvitePage
-                        .assertRightPage();
+                        .assertIsRightPage();
 
         System.out.println("RegistrationTest.smartPageOpeningRegistrationTest EXIT");
     }
@@ -140,7 +141,7 @@ public class RegistrationTest extends BaseTest {
                     .clickRegistrationButton()
                         // Working with InvitePage
         .then()
-                        .assertRightPage();
+                        .assertIsRightPage();
 
         System.out.println("RegistrationTest.smartPageOpeningRegistrationTest EXIT");
     }
