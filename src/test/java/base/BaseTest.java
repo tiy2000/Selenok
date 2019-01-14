@@ -9,7 +9,6 @@ import org.testng.annotations.*;
 
 import java.io.File;
 import java.lang.reflect.Method;
-import java.util.Arrays;
 
 @Listeners(ScreenshotListener.class)
 public class BaseTest {
@@ -51,16 +50,20 @@ public class BaseTest {
         System.out.println("BaseTest.tearDownDriver EXIT");
     }
 
-    protected void createChromeWebDriver(AutoTearDown autoTearDown) {
-        this.autoTearDown = autoTearDown;
+    private void initializeWebDriverViaConfig() {
+        // There will be configuration reading here...
         WebDriver driver = new ChromeDriver();
         setDriver(driver);
     }
 
-    protected void createChromeWebDriver() {
+    protected void initializeWebDriverWithAutoTearDown(AutoTearDown autoTearDown) {
+        this.autoTearDown = autoTearDown;
+        initializeWebDriverViaConfig();
+    }
+
+    protected void initializeWebDriverWithAutoTearDown() {
         this.autoTearDown = determineAutoTearDown();
-        WebDriver driver = new ChromeDriver();
-        setDriver(driver);
+        initializeWebDriverViaConfig();
     }
 
     private AutoTearDown determineAutoTearDown() {
