@@ -10,8 +10,8 @@ public class HomePageTest extends BaseTest {
 
     @BeforeMethod
     public void init() {
-//        createChromeWebDriver(AutoTearDown.NONE);
-        createChromeWebDriver(AutoTearDown.AFTER_METHOD);
+//        initializeWebDriverWithAutoTearDown(AutoTearDown.NONE);
+        initializeWebDriverWithAutoTearDown(AutoTearDown.AFTER_METHOD);
     }
 
 //    @AfterMethod

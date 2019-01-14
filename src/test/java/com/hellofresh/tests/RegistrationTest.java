@@ -4,6 +4,7 @@ import base.BaseTest;
 import com.hellofresh.pages.InvitePage;
 import com.hellofresh.pages.LoginPage;
 import com.hellofresh.pages.SignUpPage;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -11,13 +12,14 @@ public class RegistrationTest extends BaseTest {
 
 //    @BeforeClass
 //    public void initBeforeClass() {
-//        createChromeWebDriver(AutoTearDown.AFTER_CLASS);
+////        initializeWebDriverWithAutoTearDown(AutoTearDown.AFTER_CLASS);
+//        initializeWebDriverWithAutoTearDown();
 //    }
 
     @BeforeMethod
     public void initBeforeMethod() {
-//        createChromeWebDriver(AutoTearDown.AFTER_METHOD);
-        createChromeWebDriver();
+//        initializeWebDriverWithAutoTearDown(AutoTearDown.AFTER_METHOD);
+        initializeWebDriverWithAutoTearDown();
     }
 
     @Test
