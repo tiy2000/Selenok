@@ -82,20 +82,23 @@ public abstract class BasePage<T extends BasePage> {
         return waitElement(by);
     }
 
-    private T sendKeys(By by, CharSequence... charSequences) {
-        findElement(by).sendKeys(charSequences);
-        return (T) this;
-    }
+//    private T sendKeys(By by, CharSequence... charSequences) {
+//        findElement(by).sendKeys(charSequences);
+//        return (T) this;
+//    }
+//
+//    private T clearAndFill(By by, CharSequence... charSequences) {
+//        WebElement element = waitElement(ExpectedConditions.visibilityOfElementLocated(by));
+//        element.clear();
+//        element.sendKeys(charSequences);
+//        return (T) this;
+//    }
 
-    private T clearAndFill(By by, CharSequence... charSequences) {
+    public T enterInputValue(By by, CharSequence... charSequences) {
         WebElement element = waitElement(ExpectedConditions.visibilityOfElementLocated(by));
         element.clear();
         element.sendKeys(charSequences);
         return (T) this;
-    }
-
-    public T enterInputValue(By by, CharSequence... charSequences) {
-        return clearAndFill(by, charSequences);
     }
 
     public T click(By by) {
@@ -154,13 +157,13 @@ public abstract class BasePage<T extends BasePage> {
         return (T) this;
     }
 
-    public T assertRightPage() throws AssertionError {
-        System.out.println("BasePage.assertRightPage ENTER");
+    public T assertIsRightPage() throws AssertionError {
+        System.out.println("BasePage.assertIsRightPage ENTER");
         if (!isRightPage()) {
-            System.out.println("BasePage.assertRightPage ENTER (FAIL)");
+            System.out.println("BasePage.assertIsRightPage ENTER (FAIL)");
             throw new AssertionError(makeMessage());
         }
-        System.out.println("BasePage.assertRightPage ENTER (PASS)");
+        System.out.println("BasePage.assertIsRightPage ENTER (PASS)");
         return (T) this;
     }
 
@@ -206,7 +209,9 @@ public abstract class BasePage<T extends BasePage> {
 
     public T openPage() throws InvalidUsageOrConfig {
         if (BASE_URL != null & pagePath != null) {
+            System.out.println("*** Opening page: " + getFullPagePath() + " ...");
             getDriver().get(getFullPagePath());
+            System.out.println("*** Page is opened");
         } else {
             throw new InvalidUsageOrConfig("To open page BASE_URI and pagePath should be assigned");
         }

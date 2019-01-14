@@ -5,14 +5,14 @@ import org.openqa.selenium.SessionNotCreatedException;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.Listeners;
+import org.testng.annotations.*;
 
 import java.io.File;
+import java.lang.reflect.Method;
+import java.util.Arrays;
 
 @Listeners(ScreenshotListener.class)
-public abstract class BaseTest {
+public class BaseTest {
 
     public enum AutoTearDown {NONE, AFTER_METHOD, AFTER_CLASS}
 
@@ -22,15 +22,15 @@ public abstract class BaseTest {
     //region ===== Working with WebDriver instance =====
 
     private void setDriver(WebDriver driver) {
-        System.out.println("BaseTest.setDriver ENTER");
+//        System.out.println("BaseTest.setDriver ENTER");
         BasePage.driverThreadLocal.set(driver);
-        System.out.println("BaseTest.setDriver EXIT");
+//        System.out.println("BaseTest.setDriver EXIT");
     }
 
     private void removeDriver() {
-        System.out.println("BaseTest.removeDriver ENTER");
+//        System.out.println("BaseTest.removeDriver ENTER");
         BasePage.driverThreadLocal.remove();
-        System.out.println("BaseTest.removeDriver EXIT");
+//        System.out.println("BaseTest.removeDriver EXIT");
     }
 
     protected static WebDriver getDriver() {
@@ -55,6 +55,32 @@ public abstract class BaseTest {
         this.autoTearDown = autoTearDown;
         WebDriver driver = new ChromeDriver();
         setDriver(driver);
+    }
+
+    protected void createChromeWebDriver() {
+        this.autoTearDown = determineAutoTearDown();
+        WebDriver driver = new ChromeDriver();
+        setDriver(driver);
+    }
+
+    private AutoTearDown determineAutoTearDown() {
+        Method caller = getCallerMethod();
+        if (caller.isAnnotationPresent(BeforeClass.class)) {
+            return AutoTearDown.AFTER_CLASS;
+        }
+        if (caller.isAnnotationPresent(BeforeMethod.class)) {
+            return AutoTearDown.AFTER_METHOD;
+        }
+        throw new InvalidUsageOrConfig("createWebDriver() method should be called from @BeforeClass or @BeforeMethod method");
+    }
+
+    public Method getCallerMethod() {
+        StackTraceElement caller = Thread.currentThread().getStackTrace()[4];
+        Method method = null;
+        try {
+            method = this.getClass().getMethod(caller.getMethodName());
+        } catch (NoSuchMethodException e) {}
+        return method;
     }
     //endregion
 
@@ -132,5 +158,16 @@ public abstract class BaseTest {
         return this;
     }
     //endregion
+
+
+//    @BeforeClass
+//    public void init() {
+//        createChromeWebDriver();
+//    }
+//
+//    @Test
+//    public void test() {
+//
+//    }
 
 }
