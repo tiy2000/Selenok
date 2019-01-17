@@ -161,10 +161,10 @@ public abstract class BasePage<T extends BasePage> {
     public T assertIsRightPage() throws AssertionError {
         System.out.println("BasePage.assertIsRightPage ENTER");
         if (!isRightPage()) {
-            System.out.println("BasePage.assertIsRightPage ENTER (FAIL)");
+            System.out.println("BasePage.assertIsRightPage EXIT (FAIL)");
             throw new AssertionError(makeMessage());
         }
-        System.out.println("BasePage.assertIsRightPage ENTER (PASS)");
+        System.out.println("BasePage.assertIsRightPage EXIT (PASS)");
         return (T) this;
     }
 
@@ -210,11 +210,11 @@ public abstract class BasePage<T extends BasePage> {
 
     public T openPage() throws InvalidUsageOrConfig {
         if (BASE_URL != null & pagePath != null) {
-            System.out.println("*** Opening page: " + getFullPagePath() + " ...");
+            System.out.println("*** Opening page: " + getFullPagePath();
             getDriver().get(getFullPagePath());
             System.out.println("*** Page is opened");
         } else {
-            throw new InvalidUsageOrConfig("To open page BASE_URI and pagePath should be assigned");
+            throw new InvalidUsageOrConfig("To open page the BASE_URI and the pagePath should be assigned");
         }
         return (T) this;
     }
