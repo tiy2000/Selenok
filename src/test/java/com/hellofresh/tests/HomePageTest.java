@@ -11,7 +11,8 @@ public class HomePageTest extends BaseTest {
     @BeforeMethod
     public void init() {
 //        initializeWebDriverWithAutoTearDown(AutoTearDown.NONE);
-        initializeWebDriverWithAutoTearDown(AutoTearDown.AFTER_METHOD);
+//        initializeWebDriverWithAutoTearDown(AutoTearDown.AFTER_METHOD);
+        initializeWebDriverWithAutoTearDown();
     }
 
 //    @AfterMethod
