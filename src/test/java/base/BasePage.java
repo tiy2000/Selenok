@@ -210,7 +210,7 @@ public abstract class BasePage<T extends BasePage> {
 
     public T openPage() throws InvalidUsageOrConfig {
         if (BASE_URL != null & pagePath != null) {
-            System.out.println("*** Opening page: " + getFullPagePath();
+            System.out.println("*** Opening page: " + getFullPagePath());
             getDriver().get(getFullPagePath());
             System.out.println("*** Page is opened");
         } else {
