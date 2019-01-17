@@ -20,10 +20,11 @@ public abstract class BasePage<T extends BasePage> {
 
     //region ===== Working with WebDriver instance =====
 
-    static final ThreadLocal<WebDriver> driverThreadLocal = new ThreadLocal<>();
+//    static final ThreadLocal<WebDriver> driverThreadLocal = new ThreadLocal<>();
 
     protected static WebDriver getDriver() {
-        return driverThreadLocal.get();
+//        return driverThreadLocal.get();
+        return TestEnvironment.getDriver();
     }
     //endregion
 
