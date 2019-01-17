@@ -34,7 +34,8 @@ public class ScreenshotListener extends TestListenerAdapter {
     @Attachment(value = "Screen shot", type = "image/png", fileExtension = ".png")
     private byte[] getScreenShot() {
         try {
-            return ((TakesScreenshot) BaseTest.getDriver()).getScreenshotAs(OutputType.BYTES);
+//            return ((TakesScreenshot) BaseTest.getDriver()).getScreenshotAs(OutputType.BYTES);
+            return ((TakesScreenshot) TestEnvironment.getDriver()).getScreenshotAs(OutputType.BYTES);
         } catch (SessionNotCreatedException e) {
 //            logger.error(String.format("Selenium screenshot capture failed: %s", e.getMessage()));
 //            e.printStackTrace();

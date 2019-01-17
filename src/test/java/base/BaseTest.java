@@ -13,27 +13,26 @@ import java.lang.reflect.Method;
 @Listeners(ScreenshotListener.class)
 public class BaseTest {
 
-    public enum AutoTearDown {NONE, AFTER_METHOD, AFTER_CLASS}
-
-    private AutoTearDown autoTearDown = AutoTearDown.NONE;
-
 
     //region ===== Working with WebDriver instance =====
 
     private void setDriver(WebDriver driver) {
 //        System.out.println("BaseTest.setDriver ENTER");
-        BasePage.driverThreadLocal.set(driver);
+//        BasePage.driverThreadLocal.set(driver);
+        TestEnvironment.driverThreadLocal.set(driver);
 //        System.out.println("BaseTest.setDriver EXIT");
     }
 
     private void removeDriver() {
 //        System.out.println("BaseTest.removeDriver ENTER");
-        BasePage.driverThreadLocal.remove();
+//        BasePage.driverThreadLocal.remove();
+        TestEnvironment.driverThreadLocal.remove();
 //        System.out.println("BaseTest.removeDriver EXIT");
     }
 
     protected static WebDriver getDriver() {
-        return BasePage.getDriver();
+//        return BasePage.getDriver();
+        return TestEnvironment.getDriver();
     }
 
     protected static boolean isDriverCreated() {
@@ -50,20 +49,24 @@ public class BaseTest {
         System.out.println("BaseTest.tearDownDriver EXIT");
     }
 
-    private void initializeWebDriverViaConfig() {
+    protected void initializeWebDriver() {
         // There will be configuration reading here...
         WebDriver driver = new ChromeDriver();
         setDriver(driver);
     }
 
+    //region ----- Auto tearDown settings -----
+    public enum AutoTearDown {NONE, AFTER_METHOD, AFTER_CLASS}
+    private AutoTearDown autoTearDown = AutoTearDown.NONE;
+
     protected void initializeWebDriverWithAutoTearDown(AutoTearDown autoTearDown) {
         this.autoTearDown = autoTearDown;
-        initializeWebDriverViaConfig();
+        initializeWebDriver();
     }
 
     protected void initializeWebDriverWithAutoTearDown() {
         this.autoTearDown = determineAutoTearDown();
-        initializeWebDriverViaConfig();
+        initializeWebDriver();
     }
 
     private AutoTearDown determineAutoTearDown() {
@@ -85,6 +88,7 @@ public class BaseTest {
         } catch (NoSuchMethodException e) {}
         return method;
     }
+    //endregion
     //endregion
 
 
@@ -163,14 +167,40 @@ public class BaseTest {
     //endregion
 
 
+    //region ===== FOR DEBUG ONLY =====
+
 //    @BeforeClass
 //    public void init() {
-//        createChromeWebDriver();
+//        initializeWebDriverWithAutoTearDown();
 //    }
 //
 //    @Test
 //    public void test() {
+//        step1();
+//        step2();
+//    }
+//
+//    @Step
+//    private void step1() {
+//        step11();
+//        step12();
+//    }
+//
+//    @Step
+//    private void step11() {
 //
 //    }
+//
+//    @Step
+//    private void step12() {
+//
+//    }
+//
+//    @Step
+//    private void step2() {
+//
+//    }
+
+    //endregion
 
 }
