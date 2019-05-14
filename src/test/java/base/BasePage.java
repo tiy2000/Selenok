@@ -11,7 +11,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 
-public abstract class BasePage<T extends BasePage> {
+public abstract class BasePage<T extends BasePage<T>> {
 
     public BasePage() {
         parseAnnotations();
@@ -204,6 +204,16 @@ public abstract class BasePage<T extends BasePage> {
 
 
     //region ===== Opening pages =====
+
+    public static <T extends BasePage<T>> T openNewPage(Class<T> clazz) {
+        T page = null;
+        try {
+            page = clazz.newInstance();
+            page.openPage();
+        } catch (InstantiationException | IllegalAccessException e) {
+        }
+        return page;
+    }
 
     private static String BASE_URL;
     private String pagePath;

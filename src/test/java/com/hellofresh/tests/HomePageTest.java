@@ -1,5 +1,6 @@
 package com.hellofresh.tests;
 
+import base.BasePage;
 import base.BaseTest;
 import com.hellofresh.pages.HomePage;
 import org.testng.annotations.BeforeMethod;
@@ -22,7 +23,8 @@ public class HomePageTest extends BaseTest {
 
     @Test
     public void homePageTest() {
-        HomePage homePage = HomePage.openNewPage();
+//        HomePage homePage = HomePage.openNewPage();
+        HomePage homePage = BasePage.openNewPage(HomePage.class);
 
 //        homePage.validateIsRightPage();
         homePage.assertIsRightPage();

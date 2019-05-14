@@ -7,7 +7,7 @@ import io.qameta.allure.Step;
 
 import java.util.concurrent.TimeUnit;
 
-public class HelloFreshBasePage<T extends BasePage> extends BasePage<T> {
+public class HelloFreshBasePage<T extends HelloFreshBasePage<T>> extends BasePage<T> {
 
     static {
         setBaseUrl("https://www.hellofresh.com");
