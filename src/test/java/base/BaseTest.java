@@ -56,7 +56,10 @@ public class BaseTest {
     }
 
     //region ----- Auto tearDown settings -----
-    public enum AutoTearDown {NONE, AFTER_METHOD, AFTER_CLASS}
+    public enum AutoTearDown {
+        NONE, AFTER_METHOD, AFTER_CLASS
+    }
+
     private AutoTearDown autoTearDown = AutoTearDown.NONE;
 
     protected void initializeWebDriverWithAutoTearDown(AutoTearDown autoTearDown) {
@@ -85,7 +88,8 @@ public class BaseTest {
         Method method = null;
         try {
             method = this.getClass().getMethod(caller.getMethodName());
-        } catch (NoSuchMethodException e) {}
+        } catch (NoSuchMethodException e) {
+        }
         return method;
     }
     //endregion
@@ -146,8 +150,8 @@ public class BaseTest {
 
     //region ===== Opening pages =====
 
-    public  <T extends BasePage> T openNewPage(Class<? extends BasePage> pageClass) throws InvalidUsageOrConfig {
-        T newPage = null;
+    public <T extends BasePage<T>> T openNewPage(Class<T> pageClass) throws InvalidUsageOrConfig {
+        T newPage;
         try {
             newPage = (T) pageClass.newInstance();
             newPage.openPage();
@@ -168,6 +172,7 @@ public class BaseTest {
 
 
     //region ===== FOR DEBUG ONLY =====
+
 
 //    @BeforeClass
 //    public void init() {
