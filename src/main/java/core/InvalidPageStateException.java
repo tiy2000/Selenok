@@ -1,4 +1,4 @@
-package base;
+package core;
 
 public class InvalidPageStateException extends RuntimeException {
     public InvalidPageStateException(String message) {

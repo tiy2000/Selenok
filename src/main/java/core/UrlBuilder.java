@@ -1,4 +1,4 @@
-package base;
+package core;
 
 public interface UrlBuilder {
 

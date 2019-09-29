@@ -1,4 +1,4 @@
-package base;
+package core;
 
 import io.qameta.allure.Attachment;
 import org.apache.commons.io.FileUtils;

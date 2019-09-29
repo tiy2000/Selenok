@@ -1,12 +1,12 @@
-package base;
+package core;
 
-import base.annotations.PageId;
-import base.annotations.PagePath;
-import base.annotations.PageUrl;
+import core.annotations.PageId;
+import core.annotations.PageId.Condition;
+import core.annotations.PagePath;
+import core.annotations.PageUrl;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.testng.annotations.Test;
 
 import java.lang.reflect.Field;
 
@@ -42,7 +42,7 @@ public class AnnotationParser {
                 try {
                     if (field.getType().equals(By.class)) {
                         PageId pageId = (PageId) field.getAnnotation(PageId.class);
-                        PageId.Condition condition = pageId.condition();
+                        Condition condition = pageId.condition();
                         field.setAccessible(true);
                         By by = (By) field.get(object);
                         switch (condition) {
