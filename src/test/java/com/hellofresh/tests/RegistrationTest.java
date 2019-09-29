@@ -25,7 +25,8 @@ public class RegistrationTest extends BaseTest {
     @Test
     public void directOpeningLoginPageTest() {
         System.out.println("RegistrationTest.directOpeningLoginPageTest ENTER");
-        LoginPage loginPage = LoginPage.openNewPage();
+//        LoginPage loginPage = LoginPage.openNewPage();
+        LoginPage loginPage = openNewPage(LoginPage.class);
         loginPage.assertIsRightPage();
         System.out.println("RegistrationTest.directOpeningLoginPageTest EXIT");
     }
@@ -49,7 +50,8 @@ public class RegistrationTest extends BaseTest {
 //    @Test()
     public void goodRegistrationTest() {
         System.out.println("RegistrationTest.goodRegistrationTest ENTER");
-        LoginPage loginPage = LoginPage.openNewPage();
+//        LoginPage loginPage = LoginPage.openNewPage();
+        LoginPage loginPage = openNewPage(LoginPage.class);
         loginPage.validateIsRightPage();
 
         SignUpPage signUpPage = loginPage.clickRegisterUserLink();
@@ -76,7 +78,8 @@ public class RegistrationTest extends BaseTest {
     public void bddRegistrationTest() {
         System.out.println("RegistrationTest.goodRegistrationTest ENTER");
 
-        LoginPage.openNewPage()
+//        LoginPage.openNewPage()
+        openNewPage(LoginPage.class)
                 .validateIsRightPage()
                 .clickRegisterUserLink()
                     // Working with SignUpPage
@@ -101,7 +104,7 @@ public class RegistrationTest extends BaseTest {
         System.out.println("RegistrationTest.smartPageOpeningRegistrationTest ENTER");
 
         given()
-                .<LoginPage>openNewPage(LoginPage.class)
+                .openNewPage(LoginPage.class)
                 .validateIsRightPage()
                 .clickRegisterUserLink()
                     // Working with SignUpPage
@@ -126,7 +129,7 @@ public class RegistrationTest extends BaseTest {
         System.out.println("RegistrationTest.smartPageOpeningRegistrationTest ENTER");
 
         given()
-                .<LoginPage>openNewPage(LoginPage.class)
+                .openNewPage(LoginPage.class)
                 .validateIsRightPage()
                 .clickRegisterUserLink()
                     // Working with SignUpPage
