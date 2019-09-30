@@ -11,11 +11,6 @@ public class UrlParameter {
         this.name = name;
     }
 
-    public UrlParameter(String name, boolean optional) {
-        this.name = name;
-        this.optional = optional;
-    }
-
     public UrlParameter(String name, boolean optional, String defaultValue) {
         this.name = name;
         this.optional = optional;

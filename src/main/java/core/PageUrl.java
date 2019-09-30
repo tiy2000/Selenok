@@ -32,18 +32,21 @@ public class PageUrl implements UrlBuilder {
     }
 
     @Override
-    public void setBaseUrl(String baseUrl) {
+    public UrlBuilder setBaseUrl(String baseUrl) {
         this.baseUrl = baseUrl;
+        return this;
     }
 
     @Override
-    public void setRelativePath(String relativePath) {
+    public UrlBuilder setRelativePath(String relativePath) {
         this.relativePath = relativePath;
+        return this;
     }
 
     @Override
-    public void setAbsoluteUrl(String absoluteUrl) {
+    public UrlBuilder setAbsoluteUrl(String absoluteUrl) {
         this.absoluteUrl = absoluteUrl;
+        return this;
     }
 
     @Override

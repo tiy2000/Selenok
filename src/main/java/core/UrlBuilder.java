@@ -2,11 +2,11 @@ package core;
 
 public interface UrlBuilder {
 
-    void setBaseUrl(String url);
+    UrlBuilder setBaseUrl(String url);
 
-    void setRelativePath(String path);
+    UrlBuilder setRelativePath(String path);
 
-    void setAbsoluteUrl(String url);
+    UrlBuilder setAbsoluteUrl(String url);
 
     UrlBuilder addPathParam(String name);
 
