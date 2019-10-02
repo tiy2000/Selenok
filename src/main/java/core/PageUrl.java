@@ -3,11 +3,10 @@ package core;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class PageUrl implements UrlBuilder {
+public class PageUrl {
 
-    String baseUrl;
-    String relativePath = "";
-    String absoluteUrl = "";
+    String baseUrl = "";
+    String pagePath = "";
 
     Map<String, UrlParameter> pathParams = new LinkedHashMap<>();
     Map<String, UrlParameter> queryParams = new LinkedHashMap<>();
@@ -19,57 +18,66 @@ public class PageUrl implements UrlBuilder {
         this.baseUrl = baseUrl;
     }
 
-    public String getBaseUrl() {
-        return baseUrl;
-    }
 
-    public String getRelativePath() {
-        return relativePath;
-    }
-
-    public String getAbsoluteUrl() {
-        return absoluteUrl;
-    }
-
-    @Override
-    public UrlBuilder setBaseUrl(String baseUrl) {
+    public PageUrl setBaseUrl(String baseUrl) {
         this.baseUrl = baseUrl;
         return this;
     }
 
-    @Override
-    public UrlBuilder setRelativePath(String relativePath) {
-        this.relativePath = relativePath;
+    public String getBaseUrl() {
+        return baseUrl;
+    }
+
+    public PageUrl setPagePath(String pagePath) {
+        this.pagePath = pagePath;
         return this;
     }
 
-    @Override
-    public UrlBuilder setAbsoluteUrl(String absoluteUrl) {
-        this.absoluteUrl = absoluteUrl;
-        return this;
+    public String getPagePath() {
+        return pagePath;
     }
 
-    @Override
-    public UrlBuilder addPathParam(String name) {
+    public PageUrl addPathParam(String name) {
         pathParams.put(name, new UrlParameter(name));
         return this;
     }
 
-    @Override
-    public UrlBuilder addOptionalPathParam(String name, String defaultValue) {
+    public PageUrl addOptionalPathParam(String name) {
+        pathParams.put(name, new UrlParameter(name, true, null));
+        return this;
+    }
+
+    public PageUrl addOptionalPathParam(String name, String defaultValue) {
         pathParams.put(name, new UrlParameter(name, true, defaultValue));
         return this;
     }
 
-    @Override
-    public UrlBuilder addQueryParam(String name) {
+    public PageUrl addQueryParam(String name) {
         queryParams.put(name, new UrlParameter(name));
         return this;
     }
 
-    @Override
-    public UrlBuilder addOptionalQueryParam(String name, String defaultValue) {
+    public PageUrl addOptionalQueryParam(String name) {
+        queryParams.put(name, new UrlParameter(name, true, null));
+        return this;
+    }
+
+    public PageUrl addOptionalQueryParam(String name, String defaultValue) {
         queryParams.put(name, new UrlParameter(name, true, defaultValue));
+        return this;
+    }
+
+    public PageUrl setPathParam(String name, String value) {
+        if (!pathParams.containsKey(name))
+            throw new IllegalArgumentException("Path param '" + name + "doesn't exists");
+        pathParams.get(name).setValue(value);
+        return this;
+    }
+
+    public PageUrl setQueryParam(String name, String value) {
+        if (!queryParams.containsKey(name))
+            throw new IllegalArgumentException("Query param '" + name + "doesn't exists");
+        queryParams.get(name).setValue(value);
         return this;
     }
 
@@ -92,8 +100,45 @@ public class PageUrl implements UrlBuilder {
         }
     }
 
+    private void check() {
+        if (baseUrl.isEmpty()) throw new IllegalArgumentException("Base URL is not specified");
+        checkParamsSpecified();
+    }
+
+    private void makePathParamsString(StringBuilder sb) {
+        for (UrlParameter param : pathParams.values()) {
+            if (param.getValue() != null) {
+                if (sb.charAt(sb.length() - 1) != '/') sb.append("/");
+                sb.append(param.getValue());
+            }
+        }
+    }
+
+    private void makeQueryParamsString(StringBuilder sb) {
+        boolean isFirst = true;
+        for (UrlParameter param : queryParams.values()) {
+            if (param.getValue() != null) {
+                if (isFirst) {
+                    sb.append("?");
+                    isFirst = false;
+                } else {
+                    sb.append("&");
+                }
+                sb.append(param.name)
+                        .append("=")
+                        .append(param.getValue());
+            }
+        }
+    }
 
     public String getUrl() {
-        return null;
+        check();
+        StringBuilder url = new StringBuilder(baseUrl);
+        if (baseUrl.endsWith("/")) url.delete(url.length() - 1, url.length());
+        if (!pagePath.startsWith("/")) url.append("/");
+        url.append(pagePath);
+        makePathParamsString(url);
+        makeQueryParamsString(url);
+        return url.toString();
     }
 }

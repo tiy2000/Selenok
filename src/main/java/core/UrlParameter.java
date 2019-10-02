@@ -30,7 +30,9 @@ public class UrlParameter {
     }
 
     public String getValue() {
-        return value;
+        if (!optional) return value;
+        if (value != null) return value;
+        return defaultValue;
     }
 
     public void setValue(String value) {

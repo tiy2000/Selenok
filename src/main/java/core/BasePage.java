@@ -207,24 +207,50 @@ public abstract class BasePage<T extends BasePage<T>> {
 
     private static String BASE_URL;
     private String pagePath;
+    protected PageUrl pageUrl = new PageUrl();
+    PageBuilder<T> pageBuilder;
+
+    public static <T2 extends BasePage<T2>> T2 openNewPage(Class<T2> pageClass) throws InvalidUsageOrConfig {
+        T2 newPage;
+        try {
+            newPage = (T2) pageClass.newInstance();
+            newPage.openPage();
+        } catch (InstantiationException | IllegalAccessException e) {
+            throw new InvalidUsageOrConfig(e.getMessage());
+        }
+        return newPage;
+    }
+
+    public static <T2 extends BasePage<T2>> BasePage.PageBuilder preparePage(Class<T2> pageClass) throws InvalidUsageOrConfig {
+        try {
+            T2 newPage = (T2) pageClass.newInstance();
+//            newPage.openPage();
+            newPage.pageBuilder = new PageBuilder<T2>(newPage);
+            return newPage.pageBuilder;
+        } catch (InstantiationException | IllegalAccessException e) {
+            throw new InvalidUsageOrConfig(e.getMessage());
+        }
+    }
+
 
     public T openPage() throws InvalidUsageOrConfig {
-        if (BASE_URL != null & pagePath != null) {
+//        if (BASE_URL != null & pagePath != null) {
             System.out.println("*** Opening page: " + getFullPagePath());
             getDriver().get(getFullPagePath());
             System.out.println("*** Page is opened");
-        } else {
-            throw new InvalidUsageOrConfig("To open page the BASE_URI and the pagePath should be assigned");
-        }
+//        } else {
+//            throw new InvalidUsageOrConfig("To open page the BASE_URI and the pagePath should be assigned");
+//        }
         return (T) this;
     }
 
     public String getFullPagePath() {
-        String fullPath = getBaseUrl();
-        if (!fullPath.endsWith("/") && !getPagePath().startsWith("/")) {
-            fullPath += "/";
-        }
-        return fullPath + getPagePath();
+//        String fullPath = getBaseUrl();
+//        if (!fullPath.endsWith("/") && !getPagePath().startsWith("/")) {
+//            fullPath += "/";
+//        }
+//        return fullPath + getPagePath();
+        return pageUrl.getUrl();
     }
 
     public String getPagePath() {
@@ -273,5 +299,17 @@ public abstract class BasePage<T extends BasePage<T>> {
     }
     //endregion
 
+
+    public static class PageBuilder<T3 extends BasePage<T3>> {
+        private T3 page;
+
+        public PageBuilder(T3 page) {
+            this.page = page;
+        }
+
+        public T3 get() {
+            return page;
+        }
+    }
 
 }
