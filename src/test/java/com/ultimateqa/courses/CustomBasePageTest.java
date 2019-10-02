@@ -15,12 +15,12 @@ public class CustomBasePageTest extends BaseTest {
     @Test
     public void testPreparePage() {
         preparePage(CustomBasePage.class)
-//                .setPathParam("user", "john")
+                .setPathParam("user", "john")
 //                .setPathParam("doc", "doc1")
 //                .setQueryParam("p1", "v1")
 //                .setQueryParam("p2", "v2")
-//                .debugPrintUrl();
-                .openPage()
-                .m1();
+                .debugPrintUrl();
+//                .openPage()
+//                .m1();
     }
 }

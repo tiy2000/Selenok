@@ -5,19 +5,10 @@ import java.util.Map;
 
 public class PageUrl {
 
-    String baseUrl = "";
-    String pagePath = "";
 
-    Map<String, UrlParameter> pathParams = new LinkedHashMap<>();
-    Map<String, UrlParameter> queryParams = new LinkedHashMap<>();
-
-    public PageUrl() {
-    }
-
-    public PageUrl(String baseUrl) {
-        this.baseUrl = baseUrl;
-    }
-
+    //region Base URL and Page Path support
+    private String baseUrl = "";
+    private String pagePath = "";
 
     public PageUrl setBaseUrl(String baseUrl) {
         this.baseUrl = baseUrl;
@@ -35,6 +26,17 @@ public class PageUrl {
 
     public String getPagePath() {
         return pagePath;
+    }
+    //endregion
+
+
+    //region URL parameters support
+    private Map<String, UrlParameter> pathParams = new LinkedHashMap<>();
+    private Map<String, UrlParameter> queryParams = new LinkedHashMap<>();
+
+    public PageUrl addFixedPathPart(String name) {
+        pathParams.put(name, null);
+        return this;
     }
 
     public PageUrl addPathParam(String name) {
@@ -93,25 +95,30 @@ public class PageUrl {
 
     private void checkParamsSpecified(Map<String, UrlParameter> params, StringBuilder sb) {
         for (UrlParameter param : params.values()) {
-            if (!param.optional && param.value == null) {
+            if (param != null && !param.optional && param.value == null) {
                 if (sb.length() > 0) sb.append(", ");
                 sb.append(param.name);
             }
         }
     }
 
-    private void check() {
-        if (baseUrl.isEmpty()) throw new IllegalArgumentException("Base URL is not specified");
-        checkParamsSpecified();
-    }
-
     private void makePathParamsString(StringBuilder sb) {
-        for (UrlParameter param : pathParams.values()) {
-            if (param.getValue() != null) {
-                if (sb.charAt(sb.length() - 1) != '/') sb.append("/");
-                sb.append(param.getValue());
+        for (Map.Entry<String, UrlParameter> entry : pathParams.entrySet()) {
+            UrlParameter param = entry.getValue();
+            if (param == null) {
+                ensureEndsWithSlash(sb);
+                sb.append(entry.getKey());
+            } else {
+                if (param.getValue() != null) {
+                    ensureEndsWithSlash(sb);
+                    sb.append(param.getValue());
+                }
             }
         }
+    }
+
+    private void ensureEndsWithSlash(StringBuilder sb) {
+        if (sb.charAt(sb.length() - 1) != '/') sb.append("/");
     }
 
     private void makeQueryParamsString(StringBuilder sb) {
@@ -124,21 +131,31 @@ public class PageUrl {
                 } else {
                     sb.append("&");
                 }
-                sb.append(param.name)
-                        .append("=")
-                        .append(param.getValue());
+                sb.append(param.name).append("=").append(param.getValue());
             }
         }
     }
+    //endregion
+
+
+    //region Getting complete URL
+    private void checkBaseUrlAndParams() {
+        if (baseUrl.isEmpty()) throw new IllegalArgumentException("Base URL is not specified");
+        checkParamsSpecified();
+    }
 
     public String getUrl() {
-        check();
-        StringBuilder url = new StringBuilder(baseUrl);
-        if (baseUrl.endsWith("/")) url.delete(url.length() - 1, url.length());
-        if (!pagePath.startsWith("/")) url.append("/");
-        url.append(pagePath);
-        makePathParamsString(url);
-        makeQueryParamsString(url);
-        return url.toString();
+        checkBaseUrlAndParams();
+        StringBuilder sb = new StringBuilder(baseUrl);
+
+        if (baseUrl.endsWith("/")) sb.delete(sb.length() - 1, sb.length());
+        if (!pagePath.startsWith("/")) sb.append("/");
+        sb.append(pagePath);
+
+        makePathParamsString(sb);
+        makeQueryParamsString(sb);
+
+        return sb.toString();
     }
+    //endregion
 }

@@ -53,6 +53,10 @@ public class PageBuilder<T extends BasePage<T>> {
         return TestEnvironment.getDriver();
     }
 
+    public T getPage() {
+        return page;
+    }
+
     public T openPage() throws InvalidUsageOrConfig {
         getDriver().get(page.pageUrl.getUrl());
         return page;

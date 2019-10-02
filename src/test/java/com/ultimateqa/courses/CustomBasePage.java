@@ -1,7 +1,6 @@
 package com.ultimateqa.courses;
 
 import core.BasePage;
-import core.annotations.PageUrl;
 
 public class CustomBasePage extends BasePage<CustomBasePage> {
 
@@ -14,8 +13,9 @@ public class CustomBasePage extends BasePage<CustomBasePage> {
 //        setPagePath("");
         pageUrl.setBaseUrl("https://courses.ultimateqa.com/")
                 .setPagePath("/")
-//                .addPathParam("user")
-//                .addOptionalPathParam("doc")
+                .addPathParam("user")
+                .addFixedPathPart("part")
+                .addOptionalPathParam("doc")
 //                .addQueryParam("p1")
                 .addOptionalQueryParam("p2");
     }

@@ -37,11 +37,15 @@ public abstract class BasePage<T extends BasePage<T>> {
         return pageUrl.getUrl();
     }
 
-    protected  <T extends BasePage<T>> core.PageBuilder<T> preparePage(Class<T> pageClass) throws InvalidUsageOrConfig {
-        return core.PageBuilder.createPageBuilder(pageClass);
+    protected <T extends BasePage<T>> PageBuilder<T> preparePage(Class<T> pageClass) throws InvalidUsageOrConfig {
+        return PageBuilder.createPageBuilder(pageClass);
     }
 
-    protected  <T extends BasePage<T>> T openNewPage(Class<T> pageClass) throws InvalidUsageOrConfig {
+    protected <T extends BasePage<T>> T createPage(Class<T> pageClass) throws InvalidUsageOrConfig {
+        return preparePage(pageClass).getPage();
+    }
+
+    protected <T extends BasePage<T>> T openNewPage(Class<T> pageClass) throws InvalidUsageOrConfig {
         return preparePage(pageClass).openPage();
     }
     //endregion

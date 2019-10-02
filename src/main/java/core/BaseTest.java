@@ -34,12 +34,10 @@ public class BaseTest {
 
 
     protected void tearDownDriver() {
-//        System.out.println("BaseTest.tearDownDriver ENTER");
         if (isDriverCreated()) {
             getDriver().quit();
             removeDriver();
         }
-//        System.out.println("BaseTest.tearDownDriver EXIT");
     }
 
     protected void initializeWebDriver() {
