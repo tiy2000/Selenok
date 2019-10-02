@@ -29,6 +29,35 @@ public abstract class BasePage<T extends BasePage<T>> {
     //endregion
 
 
+    //region ===== Opening pages =====
+
+    protected final PageUrl pageUrl = new PageUrl();
+
+    public String getUrl() {
+        return pageUrl.getUrl();
+    }
+
+    protected  <T extends BasePage<T>> core.PageBuilder<T> preparePage(Class<T> pageClass) throws InvalidUsageOrConfig {
+        return core.PageBuilder.createPageBuilder(pageClass);
+    }
+
+    protected  <T extends BasePage<T>> T openNewPage(Class<T> pageClass) throws InvalidUsageOrConfig {
+        return preparePage(pageClass).openPage();
+    }
+    //endregion
+
+
+    //region ===== Working with annotations =====
+    private void parseAnnotations() {
+        AnnotationParser parser = new AnnotationParser();
+        parser.parse(this);
+        pageUrl.setPagePath(parser.pagePath);
+        rightPageCondition = parser.rightPageCondition;
+    }
+
+    //endregion
+
+
     //region ===== Waiting elements and page conditions =====
 
     private int defaultTimeOutInSeconds = 15;
@@ -203,84 +232,6 @@ public abstract class BasePage<T extends BasePage<T>> {
     //endregion
 
 
-    //region ===== Opening pages =====
-
-    private static String BASE_URL;
-    private String pagePath;
-    protected PageUrl pageUrl = new PageUrl();
-    PageBuilder<T> pageBuilder;
-
-    public static <T2 extends BasePage<T2>> T2 openNewPage(Class<T2> pageClass) throws InvalidUsageOrConfig {
-        T2 newPage;
-        try {
-            newPage = (T2) pageClass.newInstance();
-            newPage.openPage();
-        } catch (InstantiationException | IllegalAccessException e) {
-            throw new InvalidUsageOrConfig(e.getMessage());
-        }
-        return newPage;
-    }
-
-    public static <T2 extends BasePage<T2>> BasePage.PageBuilder preparePage(Class<T2> pageClass) throws InvalidUsageOrConfig {
-        try {
-            T2 newPage = (T2) pageClass.newInstance();
-//            newPage.openPage();
-            newPage.pageBuilder = new PageBuilder<T2>(newPage);
-            return newPage.pageBuilder;
-        } catch (InstantiationException | IllegalAccessException e) {
-            throw new InvalidUsageOrConfig(e.getMessage());
-        }
-    }
-
-
-    public T openPage() throws InvalidUsageOrConfig {
-//        if (BASE_URL != null & pagePath != null) {
-            System.out.println("*** Opening page: " + getFullPagePath());
-            getDriver().get(getFullPagePath());
-            System.out.println("*** Page is opened");
-//        } else {
-//            throw new InvalidUsageOrConfig("To open page the BASE_URI and the pagePath should be assigned");
-//        }
-        return (T) this;
-    }
-
-    public String getFullPagePath() {
-//        String fullPath = getBaseUrl();
-//        if (!fullPath.endsWith("/") && !getPagePath().startsWith("/")) {
-//            fullPath += "/";
-//        }
-//        return fullPath + getPagePath();
-        return pageUrl.getUrl();
-    }
-
-    public String getPagePath() {
-        return pagePath;
-    }
-
-    protected void setPagePath(String pagePath) {
-        this.pagePath = pagePath;
-    }
-
-    public static String getBaseUrl() {
-        return BASE_URL;
-    }
-
-    protected static void setBaseUrl(String baseUrl) {
-        BASE_URL = baseUrl;
-    }
-    //endregion
-
-
-    //region ===== Working with annotations =====
-    private void parseAnnotations() {
-        AnnotationParser parser = new AnnotationParser();
-        parser.parse(this);
-        pagePath = parser.pagePath;
-        rightPageCondition = parser.rightPageCondition;
-    }
-    //endregion
-
-
     //region ===== Syntax sugar =====
     public T testScenario() {
         return (T) this;
@@ -298,18 +249,5 @@ public abstract class BasePage<T extends BasePage<T>> {
         return (T) this;
     }
     //endregion
-
-
-    public static class PageBuilder<T3 extends BasePage<T3>> {
-        private T3 page;
-
-        public PageBuilder(T3 page) {
-            this.page = page;
-        }
-
-        public T3 get() {
-            return page;
-        }
-    }
 
 }

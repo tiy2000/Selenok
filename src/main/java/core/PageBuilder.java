@@ -1,20 +1,22 @@
 package core;
 
+import org.openqa.selenium.WebDriver;
+
 public class PageBuilder<T extends BasePage<T>> {
 
     private T page;
 
-    public static <T2 extends BasePage<T2>> PageBuilder<T2> createPage(Class<T2> pageClass) {
+    public static <T2 extends BasePage<T2>> PageBuilder<T2> createPageBuilder(Class<T2> pageClass) throws InvalidUsageOrConfig {
         T2 page = createPageInstance(pageClass);
         return new PageBuilder<>(page);
     }
 
-    private static <T2 extends BasePage<T2>> T2 createPageInstance(Class<T2> pageClass) {
+    private static <T2 extends BasePage<T2>> T2 createPageInstance(Class<T2> pageClass) throws InvalidUsageOrConfig {
         try {
             T2 page = pageClass.newInstance();
             return page;
         } catch (InstantiationException | IllegalAccessException e) {
-            throw new IllegalArgumentException("Can't create instance of " + pageClass.getName() + " class");
+            throw new InvalidUsageOrConfig("Can't create instance of " + pageClass.getName() + " class (" + e.getMessage() + ")");
         }
     }
 
@@ -47,8 +49,12 @@ public class PageBuilder<T extends BasePage<T>> {
         return this;
     }
 
-    public T openPage() {
-        page.openPage();
+    private WebDriver getDriver() {
+        return TestEnvironment.getDriver();
+    }
+
+    public T openPage() throws InvalidUsageOrConfig {
+        getDriver().get(page.pageUrl.getUrl());
         return page;
     }
 }

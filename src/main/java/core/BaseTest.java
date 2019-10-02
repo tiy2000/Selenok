@@ -17,36 +17,29 @@ public class BaseTest {
     //region ===== Working with WebDriver instance =====
 
     private void setDriver(WebDriver driver) {
-//        System.out.println("BaseTest.setDriver ENTER");
-//        BasePage.driverThreadLocal.set(driver);
-        TestEnvironment.driverThreadLocal.set(driver);
-//        System.out.println("BaseTest.setDriver EXIT");
+        TestEnvironment.setDriver(driver);
     }
 
     private void removeDriver() {
-//        System.out.println("BaseTest.removeDriver ENTER");
-//        BasePage.driverThreadLocal.remove();
-        TestEnvironment.driverThreadLocal.remove();
-//        System.out.println("BaseTest.removeDriver EXIT");
+        TestEnvironment.removeDriver();
     }
 
     protected static WebDriver getDriver() {
-//        return BasePage.getDriver();
         return TestEnvironment.getDriver();
     }
 
     protected static boolean isDriverCreated() {
-        return getDriver() != null;
+        return TestEnvironment.isDriverCreated();
     }
 
 
     protected void tearDownDriver() {
-        System.out.println("BaseTest.tearDownDriver ENTER");
+//        System.out.println("BaseTest.tearDownDriver ENTER");
         if (isDriverCreated()) {
             getDriver().quit();
             removeDriver();
         }
-        System.out.println("BaseTest.tearDownDriver EXIT");
+//        System.out.println("BaseTest.tearDownDriver EXIT");
     }
 
     protected void initializeWebDriver() {
@@ -150,15 +143,12 @@ public class BaseTest {
 
     //region ===== Opening pages =====
 
-    public <T extends BasePage<T>> T openNewPage(Class<T> pageClass) throws InvalidUsageOrConfig {
-        T newPage;
-        try {
-            newPage = (T) pageClass.newInstance();
-            newPage.openPage();
-        } catch (InstantiationException | IllegalAccessException e) {
-            throw new InvalidUsageOrConfig(e.getMessage());
-        }
-        return newPage;
+    protected  <T extends BasePage<T>> PageBuilder<T> preparePage(Class<T> pageClass) throws InvalidUsageOrConfig {
+        return PageBuilder.createPageBuilder(pageClass);
+    }
+
+    protected  <T extends BasePage<T>> T openNewPage(Class<T> pageClass) throws InvalidUsageOrConfig {
+        return preparePage(pageClass).openPage();
     }
     //endregion
 
