@@ -19,6 +19,6 @@ public class GoogleTest extends BaseTest {
 
     @Test
     public void testHomePage() {
-//        openNewPage(GoogleHomePage.class);
+        openNewPage(GoogleHomePage.class);
     }
 }
