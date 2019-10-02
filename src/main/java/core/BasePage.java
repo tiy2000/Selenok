@@ -1,5 +1,6 @@
 package core;
 
+import core.annotations.BaseUrl;
 import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
@@ -9,6 +10,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.lang.reflect.Field;
 import java.time.Duration;
 
 public abstract class BasePage<T extends BasePage<T>> {
@@ -53,10 +55,23 @@ public abstract class BasePage<T extends BasePage<T>> {
 
     //region ===== Working with annotations =====
     private void parseAnnotations() {
-        AnnotationParser parser = new AnnotationParser();
-        parser.parse(this);
-        pageUrl.setPagePath(parser.pagePath);
-        rightPageCondition = parser.rightPageCondition;
+//        AnnotationParser parser = new AnnotationParser();
+//        parser.parse(this);
+//        pageUrl.setPagePath(parser.pagePath);
+//        rightPageCondition = parser.rightPageCondition;
+
+        Field baseUrlField = AnnotationFinder.findAnnotatedField(this.getClass(), BaseUrl.class);
+        if (baseUrlField != null) {
+//            System.out.println(baseUrlField.getName());
+            try {
+                baseUrlField.setAccessible(true);
+                String baseUrl = (String) baseUrlField.get(this);
+//                System.out.println(baseUrl);
+                pageUrl.setBaseUrl(baseUrl);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     //endregion
