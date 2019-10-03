@@ -28,4 +28,16 @@ public class AnnotationFinder {
         }
         return null;
     }
+
+    public static Object getAnnotatedFieldValue(Object object, Class<? extends Annotation> annotationClass) {
+        Field field = findAnnotatedField(object.getClass(), annotationClass);
+        if (field != null) {
+            field.setAccessible(true);
+            try {
+                return field.get(object);
+            } catch (IllegalAccessException e) {
+            }
+        }
+        return null;
+    }
 }

@@ -1,6 +1,8 @@
 package core;
 
 import core.annotations.BaseUrl;
+import core.annotations.PageId;
+import core.annotations.PagePath;
 import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
@@ -16,6 +18,7 @@ import java.time.Duration;
 public abstract class BasePage<T extends BasePage<T>> {
 
     public BasePage() {
+//        pageUrl.setBaseUrl("http://yandex.ru");
         parseAnnotations();
     }
 
@@ -55,22 +58,44 @@ public abstract class BasePage<T extends BasePage<T>> {
 
     //region ===== Working with annotations =====
     private void parseAnnotations() {
-//        AnnotationParser parser = new AnnotationParser();
-//        parser.parse(this);
-//        pageUrl.setPagePath(parser.pagePath);
-//        rightPageCondition = parser.rightPageCondition;
+        parseBaseUrlAnnotation();
+        parsePagePathAnnotation();
+        parsePageIdAnnotation();
+    }
 
-        Field baseUrlField = AnnotationFinder.findAnnotatedField(this.getClass(), BaseUrl.class);
-        if (baseUrlField != null) {
-//            System.out.println(baseUrlField.getName());
-            try {
-                baseUrlField.setAccessible(true);
-                String baseUrl = (String) baseUrlField.get(this);
-//                System.out.println(baseUrl);
-                pageUrl.setBaseUrl(baseUrl);
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
+    private void parseBaseUrlAnnotation() {
+        String baseUrl = (String) AnnotationFinder.getAnnotatedFieldValue(this, BaseUrl.class);
+        if (baseUrl != null) pageUrl.setBaseUrl(baseUrl);
+    }
+
+    private void parsePagePathAnnotation() {
+        String pagePath = (String) AnnotationFinder.getAnnotatedFieldValue(this, PagePath.class);
+        if (pagePath != null) pageUrl.setPagePath(pagePath);
+    }
+
+    private void parsePageIdAnnotation() {
+        Field pageIdField = AnnotationFinder.findAnnotatedField(this.getClass(), PageId.class);
+        if (pageIdField == null) return;
+
+        if (pageIdField.getType().equals(By.class)) {
+            parsePageIdAnnotationWithByField(pageIdField);
+        } else if (pageIdField.getType().equals(ExpectedCondition.class)) {
+            rightPageCondition = (ExpectedCondition<WebElement>) AnnotationFinder.getAnnotatedFieldValue(this, PageId.class);
+        } else {
+            throw new InvalidUsageOrConfig("@PageId annotation should be applied to By or ExpectedCondition field type only");
+        }
+    }
+
+    private void parsePageIdAnnotationWithByField(Field pageIdField) {
+        PageId pageIdAnnotation = pageIdField.getAnnotation(PageId.class);
+        PageId.Condition condition = pageIdAnnotation.condition();
+        switch (condition) {
+            case ELEMENT_PRESENTED:
+                By pageIdLocator = (By) AnnotationFinder.getAnnotatedFieldValue(this, PageId.class);
+                if (pageIdLocator != null) rightPageCondition = ExpectedConditions.presenceOfElementLocated(pageIdLocator);
+                break;
+            default:
+                throw new InvalidUsageOrConfig("Unsupported condition in @PageId");
         }
     }
 
@@ -191,7 +216,7 @@ public abstract class BasePage<T extends BasePage<T>> {
             }
         } else {
             // Need to throw exception!
-            throw new InvalidUsageOrConfig("Call isRightPage() requires the rightPageCondition, but it was'nt assigned");
+            throw new InvalidUsageOrConfig("Call isRightPage() requires the rightPageCondition, but it's not assigned");
         }
         return true;
     }
