@@ -18,7 +18,6 @@ import java.time.Duration;
 public abstract class BasePage<T extends BasePage<T>> {
 
     public BasePage() {
-//        pageUrl.setBaseUrl("http://yandex.ru");
         parseAnnotations();
     }
 
@@ -92,7 +91,8 @@ public abstract class BasePage<T extends BasePage<T>> {
         switch (condition) {
             case ELEMENT_PRESENTED:
                 By pageIdLocator = (By) AnnotationFinder.getAnnotatedFieldValue(this, PageId.class);
-                if (pageIdLocator != null) rightPageCondition = ExpectedConditions.presenceOfElementLocated(pageIdLocator);
+                if (pageIdLocator != null)
+                    rightPageCondition = ExpectedConditions.presenceOfElementLocated(pageIdLocator);
                 break;
             default:
                 throw new InvalidUsageOrConfig("Unsupported condition in @PageId");

@@ -141,11 +141,11 @@ public class BaseTest {
 
     //region ===== Opening pages =====
 
-    protected  <T extends BasePage<T>> PageBuilder<T> preparePage(Class<T> pageClass) throws InvalidUsageOrConfig {
+    protected <T extends BasePage<T>> PageBuilder<T> preparePage(Class<T> pageClass) throws InvalidUsageOrConfig {
         return PageBuilder.createPageBuilder(pageClass);
     }
 
-    protected  <T extends BasePage<T>> T openNewPage(Class<T> pageClass) throws InvalidUsageOrConfig {
+    protected <T extends BasePage<T>> T openNewPage(Class<T> pageClass) throws InvalidUsageOrConfig {
         return preparePage(pageClass).openPage();
     }
     //endregion
