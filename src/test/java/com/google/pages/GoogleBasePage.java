@@ -1,4 +1,4 @@
-package com.google;
+package com.google.pages;
 
 import core.BasePage;
 import core.annotations.BaseUrl;

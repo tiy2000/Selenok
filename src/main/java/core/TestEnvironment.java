@@ -1,5 +1,6 @@
 package core;
 
+import core.exceptions.InvalidUsageOrConfig;
 import org.openqa.selenium.WebDriver;
 
 public class TestEnvironment {

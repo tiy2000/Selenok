@@ -1,5 +1,6 @@
 package core;
 
+import core.exceptions.InvalidUsageOrConfig;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.SessionNotCreatedException;
 import org.openqa.selenium.TakesScreenshot;

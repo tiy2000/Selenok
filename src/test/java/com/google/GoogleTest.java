@@ -1,5 +1,6 @@
 package com.google;
 
+import com.google.pages.GoogleHomePage;
 import core.BaseTest;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
