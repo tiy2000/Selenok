@@ -3,7 +3,7 @@ package core;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
-public class AnnotationFinder {
+public class ReflectionUtils {
 
     public static <T extends Annotation> T findAnnotation(Class<?> clazz, Class<T> annotationClass) {
         T annotation = (T) clazz.getAnnotation(annotationClass);
@@ -32,12 +32,26 @@ public class AnnotationFinder {
     public static Object getAnnotatedFieldValue(Object object, Class<? extends Annotation> annotationClass) {
         Field field = findAnnotatedField(object.getClass(), annotationClass);
         if (field != null) {
-            field.setAccessible(true);
-            try {
-                return field.get(object);
-            } catch (IllegalAccessException e) {
-            }
+            return getFieldValue(field, object);
         }
         return null;
+    }
+
+    public static Object getFieldValue(Field field, Object object) {
+        try {
+            field.setAccessible(true);
+            return field.get(object);
+        } catch (IllegalAccessException ignored) {
+            return null;
+        }
+    }
+
+    public static <T> T getFieldValue(Field field, Class<T> clazz, Object object) throws ClassCastException {
+        try {
+            field.setAccessible(true);
+            return (T) field.get(object);
+        } catch (IllegalAccessException ignored) {
+            return null;
+        }
     }
 }

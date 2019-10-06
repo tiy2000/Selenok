@@ -66,23 +66,23 @@ public abstract class BasePage<T extends BasePage<T>> {
     }
 
     private void parseBaseUrlAnnotation() {
-        String baseUrl = (String) AnnotationFinder.getAnnotatedFieldValue(this, BaseUrl.class);
+        String baseUrl = (String) ReflectionUtils.getAnnotatedFieldValue(this, BaseUrl.class);
         if (baseUrl != null) pageUrl.setBaseUrl(baseUrl);
     }
 
     private void parsePagePathAnnotation() {
-        String pagePath = (String) AnnotationFinder.getAnnotatedFieldValue(this, PagePath.class);
+        String pagePath = (String) ReflectionUtils.getAnnotatedFieldValue(this, PagePath.class);
         if (pagePath != null) pageUrl.setPagePath(pagePath);
     }
 
     private void parsePageIdAnnotation() {
-        Field pageIdField = AnnotationFinder.findAnnotatedField(this.getClass(), PageId.class);
+        Field pageIdField = ReflectionUtils.findAnnotatedField(this.getClass(), PageId.class);
         if (pageIdField == null) return;
 
         if (pageIdField.getType().equals(By.class)) {
             parsePageIdAnnotationWithByField(pageIdField);
         } else if (pageIdField.getType().equals(ExpectedCondition.class)) {
-            rightPageCondition = (ExpectedCondition<WebElement>) AnnotationFinder.getAnnotatedFieldValue(this, PageId.class);
+            rightPageCondition = ReflectionUtils.getFieldValue(pageIdField, ExpectedCondition.class, this);
         } else {
             throw new InvalidUsageOrConfig("@PageId annotation should be applied to By or ExpectedCondition field type only");
         }
@@ -93,7 +93,7 @@ public abstract class BasePage<T extends BasePage<T>> {
         PageId.Condition condition = pageIdAnnotation.condition();
         switch (condition) {
             case ELEMENT_PRESENTED:
-                By pageIdLocator = (By) AnnotationFinder.getAnnotatedFieldValue(this, PageId.class);
+                By pageIdLocator = ReflectionUtils.getFieldValue(pageIdField, By.class, this);
                 if (pageIdLocator != null)
                     rightPageCondition = ExpectedConditions.presenceOfElementLocated(pageIdLocator);
                 break;
