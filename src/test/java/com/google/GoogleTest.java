@@ -2,8 +2,11 @@ package com.google;
 
 import com.google.pages.GoogleHomePage;
 import core.BaseTest;
+import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import static org.testng.Assert.*;
 
 public class GoogleTest extends BaseTest {
 
@@ -20,6 +23,17 @@ public class GoogleTest extends BaseTest {
                 .enterSearchTextField("Java")
                 .clickSearchButton()
                 .assertIsRightPage();
+    }
+
+    @Test
+    public void testSearchFieldValueIsApplied() {
+        String searchText = "Java";
+        String enteredText = openNewPage(GoogleHomePage.class)
+                .validateIsRightPage()
+                .enterSearchTextField(searchText)
+                .getInputValue(GoogleHomePage.searchTextField);
+
+        assertEquals(enteredText, searchText);
     }
 
     @Test

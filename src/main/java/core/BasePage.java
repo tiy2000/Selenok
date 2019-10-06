@@ -178,6 +178,11 @@ public abstract class BasePage<T extends BasePage<T>> {
         return (T) this;
     }
 
+    public String getInputValue(By by, CharSequence... charSequences) {
+        WebElement element = waitElement(ExpectedConditions.visibilityOfElementLocated(by));
+        return element.getAttribute("value");
+    }
+
     public T click(By by) {
         waitElement(ExpectedConditions.elementToBeClickable(by)).click();
         return (T) this;
