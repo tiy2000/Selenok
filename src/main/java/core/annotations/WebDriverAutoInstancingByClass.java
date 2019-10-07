@@ -4,9 +4,6 @@ import java.lang.annotation.*;
 
 @Inherited
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.FIELD)
-public @interface PageUrl {
-
-    // NEED TO DELETE
-
+@Target(ElementType.TYPE)
+public @interface WebDriverAutoInstancingByClass {
 }

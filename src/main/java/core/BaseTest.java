@@ -1,5 +1,7 @@
 package core;
 
+import core.annotations.WebDriverAutoInstancingByClass;
+import core.annotations.WebDriverAutoInstancingByMethod;
 import core.exceptions.InvalidUsageOrConfig;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.SessionNotCreatedException;
@@ -9,14 +11,32 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.annotations.*;
 
 import java.io.File;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
 @Listeners(ScreenshotListener.class)
 public class BaseTest {
 
+    public BaseTest() {
+        parseAutoWebDriverInstancingLevelAnnotations();
+    }
 
     //region ===== Working with WebDriver instance =====
 
+    protected void tearDownDriver() {
+        if (isDriverCreated()) {
+            getDriver().quit();
+            removeDriver();
+        }
+    }
+
+    protected void initializeWebDriver() {
+        // There will be configuration reading here...
+        WebDriver driver = new ChromeDriver();
+        setDriver(driver);
+    }
+
+    //region ----- Storing the reference to WebDriver instance into TestEnvironment -----
     private void setDriver(WebDriver driver) {
         TestEnvironment.setDriver(driver);
     }
@@ -32,45 +52,70 @@ public class BaseTest {
     protected static boolean isDriverCreated() {
         return TestEnvironment.isDriverCreated();
     }
+    //endregion
+
+    //endregion
 
 
-    protected void tearDownDriver() {
-        if (isDriverCreated()) {
-            getDriver().quit();
-            removeDriver();
+    //region ===== Initialize driver =====
+
+    public enum WebDriverAutoInstancingMode {
+        NONE, METHOD, CLASS
+    }
+
+    //region ---- Auto Initialize driver -----
+
+    private WebDriverAutoInstancingMode webDriverAutoInitializeMode = WebDriverAutoInstancingMode.NONE;
+
+    private void parseAutoWebDriverInstancingLevelAnnotations() {
+        System.out.println("BaseTest.parseAutoWebDriverInstancingLevelAnnotations");
+        Annotation annotation = ReflectionUtils.findClassAnnotations(this.getClass(), WebDriverAutoInstancingByClass.class, WebDriverAutoInstancingByMethod.class);
+        if (annotation != null) {
+            if (annotation instanceof WebDriverAutoInstancingByMethod) {
+                webDriverAutoInitializeMode = WebDriverAutoInstancingMode.METHOD;
+            } else {
+                webDriverAutoInitializeMode = WebDriverAutoInstancingMode.CLASS;
+            }
         }
     }
 
-    protected void initializeWebDriver() {
-        // There will be configuration reading here...
-        WebDriver driver = new ChromeDriver();
-        setDriver(driver);
+    @BeforeClass
+    protected void autoInitializeBeforeClass() {
+        if (webDriverAutoInitializeMode == WebDriverAutoInstancingMode.CLASS) {
+            initializeWebDriverWithAutoTearDown(WebDriverAutoInstancingMode.CLASS);
+        }
     }
+
+    @BeforeMethod
+    protected void autoInitializeBeforeMethod() {
+        if (webDriverAutoInitializeMode == WebDriverAutoInstancingMode.METHOD) {
+            initializeWebDriverWithAutoTearDown(WebDriverAutoInstancingMode.METHOD);
+        }
+    }
+
+    //endregion
 
     //region ----- Auto tearDown settings -----
-    public enum AutoTearDown {
-        NONE, AFTER_METHOD, AFTER_CLASS
-    }
 
-    private AutoTearDown autoTearDown = AutoTearDown.NONE;
+    private WebDriverAutoInstancingMode webDriverAutoTearDownMode = WebDriverAutoInstancingMode.NONE;
 
-    protected void initializeWebDriverWithAutoTearDown(AutoTearDown autoTearDown) {
-        this.autoTearDown = autoTearDown;
+    protected void initializeWebDriverWithAutoTearDown(WebDriverAutoInstancingMode webDriverAutoInstancingMode) {
+        this.webDriverAutoTearDownMode = webDriverAutoInstancingMode;
         initializeWebDriver();
     }
 
     protected void initializeWebDriverWithAutoTearDown() {
-        this.autoTearDown = determineAutoTearDown();
+        this.webDriverAutoTearDownMode = determineAutoTearDown();
         initializeWebDriver();
     }
 
-    private AutoTearDown determineAutoTearDown() {
+    private WebDriverAutoInstancingMode determineAutoTearDown() {
         Method caller = getCallerMethod();
         if (caller.isAnnotationPresent(BeforeClass.class)) {
-            return AutoTearDown.AFTER_CLASS;
+            return WebDriverAutoInstancingMode.CLASS;
         }
         if (caller.isAnnotationPresent(BeforeMethod.class)) {
-            return AutoTearDown.AFTER_METHOD;
+            return WebDriverAutoInstancingMode.METHOD;
         }
         throw new InvalidUsageOrConfig("createWebDriver() method should be called from @BeforeClass or @BeforeMethod method");
     }
@@ -90,17 +135,17 @@ public class BaseTest {
 
     //region ===== Auto tearDown driver =====
 
-    protected AutoTearDown getAutoTearDown() {
-        return autoTearDown;
+    protected WebDriverAutoInstancingMode getWebDriverAutoTearDownMode() {
+        return webDriverAutoTearDownMode;
     }
 
-    protected void setAutoTearDown(AutoTearDown autoTearDown) {
-        this.autoTearDown = autoTearDown;
+    protected void setWebDriverAutoTearDownMode(WebDriverAutoInstancingMode webDriverAutoTearDownMode) {
+        this.webDriverAutoTearDownMode = webDriverAutoTearDownMode;
     }
 
     @AfterClass
     protected void autoTearDownAfterClass() {
-        if (autoTearDown == AutoTearDown.AFTER_CLASS) {
+        if (webDriverAutoTearDownMode == WebDriverAutoInstancingMode.CLASS) {
             System.out.println("BaseTest.autoTearDownAfterClass");
             tearDownDriver();
         }
@@ -108,7 +153,7 @@ public class BaseTest {
 
     @AfterMethod
     protected void autoTearDownAfterMethod() {
-        if (autoTearDown == AutoTearDown.AFTER_METHOD) {
+        if (webDriverAutoTearDownMode == WebDriverAutoInstancingMode.METHOD) {
             System.out.println("BaseTest.autoTearDownAfterMethod");
             tearDownDriver();
         }

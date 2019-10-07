@@ -5,15 +5,33 @@ import java.lang.reflect.Field;
 
 public class ReflectionUtils {
 
-    public static <T extends Annotation> T findAnnotation(Class<?> clazz, Class<T> annotationClass) {
+    public static <T extends Annotation> T findClassAnnotation(Class<?> clazz, Class<T> annotationClass) {
         T annotation = (T) clazz.getAnnotation(annotationClass);
         if (annotation == null) {
             Class superClass = clazz.getSuperclass();
             if (superClass != null) {
-                return findAnnotation(superClass, annotationClass);
+                return findClassAnnotation(superClass, annotationClass);
             }
         }
         return annotation;
+    }
+
+    public static Annotation findClassAnnotations(Class<?> clazz, Class<?>... annotationClasses) {
+//        System.out.println("ReflectionUtils.findClassAnnotations");
+//        System.out.println(clazz);
+        for (Class<?> annotationClass : annotationClasses) {
+//            System.out.println(annotationClass);
+            Annotation annotation = clazz.getAnnotation((Class<? extends Annotation>) annotationClass);
+//            System.out.println(annotation);
+            if (annotation != null) {
+                return annotation;
+            }
+        }
+        Class superClass = clazz.getSuperclass();
+        if (superClass != null) {
+            return findClassAnnotations(superClass, annotationClasses);
+        }
+        return null;
     }
 
     public static Field findAnnotatedField(Class<?> clazz, Class<? extends Annotation> annotationClass) {
@@ -37,19 +55,19 @@ public class ReflectionUtils {
         return null;
     }
 
-    public static Object getFieldValue(Field field, Object object) {
+    public static Object getFieldValue(Field field, Object target) {
         try {
             field.setAccessible(true);
-            return field.get(object);
+            return field.get(target);
         } catch (IllegalAccessException ignored) {
             return null;
         }
     }
 
-    public static <T> T getFieldValue(Field field, Class<T> clazz, Object object) throws ClassCastException {
+    public static <T> T getFieldValue(Field field, Class<T> type, Object target) throws ClassCastException {
         try {
             field.setAccessible(true);
-            return (T) field.get(object);
+            return (T) field.get(target);
         } catch (IllegalAccessException ignored) {
             return null;
         }

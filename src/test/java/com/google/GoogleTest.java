@@ -2,19 +2,22 @@ package com.google;
 
 import com.google.pages.GoogleHomePage;
 import core.BaseTest;
+import core.annotations.WebDriverAutoInstancingByClass;
+import core.annotations.WebDriverAutoInstancingByMethod;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.*;
 
+@WebDriverAutoInstancingByMethod
 public class GoogleTest extends BaseTest {
 
-    @BeforeMethod
-    public void setUp() {
-        initializeWebDriverWithAutoTearDown();
-//        initializeWebDriverWithAutoTearDown(AutoTearDown.NONE);
-    }
+//    @BeforeMethod
+//    public void setUp() {
+////        initializeWebDriverWithAutoTearDown();
+////        initializeWebDriverWithAutoTearDown(AutoTearDown.NONE);
+//    }
 
     @Test
     public void testSearchPositive() {
