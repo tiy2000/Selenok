@@ -7,7 +7,6 @@ import org.openqa.selenium.OutputType;
 import org.openqa.selenium.SessionNotCreatedException;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.annotations.*;
 
 import java.io.File;
@@ -31,14 +30,7 @@ public class BaseTest {
     }
 
     protected void initializeWebDriver() {
-        // There will be configuration reading here...
-        try {
-            // IllegalStateException
-            WebDriver driver = (WebDriver) TestEnvironment.getWebDriverClass().newInstance();
-            setDriver(driver);
-        } catch (InstantiationException | IllegalAccessException | IllegalStateException e) {
-            throw new InvalidUsageOrConfig("Can't create instance of WebDriver: " + e.getMessage());
-        }
+        setDriver(WebDriverFactory.createNewWebDriverInstance());
     }
 
     //region ----- Storing the reference to WebDriver instance into TestEnvironment -----

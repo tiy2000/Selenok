@@ -3,7 +3,10 @@ package core;
 import core.exceptions.InvalidUsageOrConfig;
 import org.openqa.selenium.WebDriver;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.Properties;
 
@@ -31,25 +34,7 @@ public class TestEnvironment {
     //endregion
 
 
-    //region ===== Determine WebDriver class =====
-
-    private static final String DRIVER_CLASS_NAME_PROPERTY = "driver.className";
-
-    static Class<?> getWebDriverClass() {
-        String webDriverClassName = getProperty(DRIVER_CLASS_NAME_PROPERTY);
-        if (webDriverClassName == null) {
-            throw new InvalidUsageOrConfig("Class name of WebDriver is not specified");
-        }
-        try {
-            return Class.forName(webDriverClassName);
-        } catch (Exception e) {
-            throw new InvalidUsageOrConfig("Can't find the class of WebDriver: " + e.getMessage());
-        }
-    }
-    //endregion
-
     //region ===== Configuration =====
-
     private static final String CONFIG_FILE = "/config.properties";
     private static Properties customProperties = new Properties();
 
@@ -79,12 +64,14 @@ public class TestEnvironment {
         customProperties.load(stream);
     }
 
+    public static String getProperty(String propertyName, String defaultValue) {
+        String value = getProperty(propertyName);
+        return value != null ? value : defaultValue;
+    }
+
     public static String getProperty(String propertyName) {
         String property = System.getProperty(propertyName);
-        if (property != null) return property;
-
-        return customProperties.getProperty(propertyName);
+        return property != null ? property : customProperties.getProperty(propertyName);
     }
     //endregion
-
 }
