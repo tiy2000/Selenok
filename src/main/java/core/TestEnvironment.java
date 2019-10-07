@@ -2,6 +2,8 @@ package core;
 
 import core.exceptions.InvalidUsageOrConfig;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 
 public class TestEnvironment {
 
@@ -26,5 +28,28 @@ public class TestEnvironment {
     }
     //endregion
 
+
+    //region ===== Determine WebDriver class =====
+    static final Class<?> getWebDriverClass() {
+        // Config files will read here...
+        String webDriverClassName = "org.openqa.selenium.chrome.ChromeDriver";
+        try {
+            return Class.forName(webDriverClassName);
+        } catch (ClassNotFoundException e) {
+            throw new InvalidUsageOrConfig("Can't find the class of WebDriver: " + e.getMessage());
+        }
+    }
+    //endregion
+
+    //region ===== Reading configuration =====
+
+    static {
+        readConfig();
+    }
+
+    private static void readConfig() {
+        // TODO: Need to implement!
+    }
+    //endregion
 
 }

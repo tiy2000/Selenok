@@ -32,8 +32,13 @@ public class BaseTest {
 
     protected void initializeWebDriver() {
         // There will be configuration reading here...
-        WebDriver driver = new ChromeDriver();
-        setDriver(driver);
+        try {
+            // IllegalStateException
+            WebDriver driver = (WebDriver) TestEnvironment.getWebDriverClass().newInstance();
+            setDriver(driver);
+        } catch (InstantiationException | IllegalAccessException | IllegalStateException e) {
+            throw new InvalidUsageOrConfig("Can't create instance of WebDriver: " + e.getMessage());
+        }
     }
 
     //region ----- Storing the reference to WebDriver instance into TestEnvironment -----
@@ -70,7 +75,7 @@ public class BaseTest {
     private void parseAutoWebDriverInstancingLevelAnnotations() {
         Annotation annotation = ReflectionUtils.findClassAnnotations(this.getClass(), WebDriverAutoInstancingByClass.class, WebDriverAutoInstancingByMethod.class);
         if (annotation != null) {
-            if (annotation instanceof WebDriverAutoInstancingByMethod) {
+            if (annotation.getClass() == WebDriverAutoInstancingByMethod.class) {
                 webDriverAutoInitializeMode = WebDriverAutoInstancingMode.METHOD;
             } else {
                 webDriverAutoInitializeMode = WebDriverAutoInstancingMode.CLASS;
