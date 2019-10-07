@@ -1,6 +1,7 @@
 package com.google;
 
 import com.google.pages.GoogleHomePage;
+import com.google.pages.GoogleSearchResultPage;
 import core.BaseTest;
 import core.annotations.WebDriverAutoInstancingByMethod;
 import org.testng.annotations.Test;
@@ -36,6 +37,14 @@ public class GoogleTest extends BaseTest {
                 .validateIsRightPage()
                 .enterSearchTextField("kfjldjs;fkjg;sgs")
                 .clickSearchButtonUnsuccessful()
+                .assertIsRightPage();
+    }
+
+    @Test
+    public void testSearchWithQueryParam() {
+        preparePage(GoogleSearchResultPage.class)
+                .setQueryParam("q", "Java")
+                .openPage()
                 .assertIsRightPage();
     }
 }

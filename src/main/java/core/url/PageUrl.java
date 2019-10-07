@@ -71,14 +71,14 @@ public class PageUrl {
 
     public PageUrl setPathParam(String name, String value) {
         if (!pathParams.containsKey(name))
-            throw new IllegalArgumentException("Path param '" + name + "doesn't exists");
+            throw new IllegalArgumentException("Path param '" + name + "' doesn't exists");
         pathParams.get(name).setValue(value);
         return this;
     }
 
     public PageUrl setQueryParam(String name, String value) {
         if (!queryParams.containsKey(name))
-            throw new IllegalArgumentException("Query param '" + name + "doesn't exists");
+            throw new IllegalArgumentException("Query param '" + name + "' doesn't exists");
         queryParams.get(name).setValue(value);
         return this;
     }
