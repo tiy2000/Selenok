@@ -2,8 +2,10 @@ package core;
 
 import core.exceptions.InvalidUsageOrConfig;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
+
+import java.io.*;
+import java.net.URL;
+import java.util.Properties;
 
 public class TestEnvironment {
 
@@ -30,25 +32,58 @@ public class TestEnvironment {
 
 
     //region ===== Determine WebDriver class =====
-    static final Class<?> getWebDriverClass() {
-        // Config files will read here...
-        String webDriverClassName = "org.openqa.selenium.chrome.ChromeDriver";
+
+    private static final String DRIVER_CLASS_NAME_PROPERTY = "driver.className";
+
+    static Class<?> getWebDriverClass() {
+        String webDriverClassName = getProperty(DRIVER_CLASS_NAME_PROPERTY);
+        if (webDriverClassName == null) {
+            throw new InvalidUsageOrConfig("Class name of WebDriver is not specified");
+        }
         try {
             return Class.forName(webDriverClassName);
-        } catch (ClassNotFoundException e) {
+        } catch (Exception e) {
             throw new InvalidUsageOrConfig("Can't find the class of WebDriver: " + e.getMessage());
         }
     }
     //endregion
 
-    //region ===== Reading configuration =====
+    //region ===== Configuration =====
+
+    private static final String CONFIG_FILE = "/config.properties";
+    private static Properties customProperties = new Properties();
 
     static {
         readConfig();
     }
 
-    private static void readConfig() {
-        // TODO: Need to implement!
+    public static void readConfig() {
+        InputStream resourceAsStream = TestEnvironment.class.getResourceAsStream(CONFIG_FILE);
+        if (resourceAsStream != null) {
+            try {
+                readCustomProperties(resourceAsStream);
+            } catch (IOException ignored) {
+            }
+        }
+    }
+
+    public static void readCustomProperties(URL url) throws IOException {
+        readCustomProperties(new File(url.getPath()));
+    }
+
+    public static void readCustomProperties(File file) throws IOException {
+        readCustomProperties(new FileInputStream(file));
+    }
+
+    public static void readCustomProperties(InputStream stream) throws IOException {
+        customProperties.load(stream);
+    }
+
+    public static String getProperty(String propertyName) {
+        String property = System.getProperty(propertyName);
+        if (property != null) return property;
+
+        return customProperties.getProperty(propertyName);
     }
     //endregion
 
