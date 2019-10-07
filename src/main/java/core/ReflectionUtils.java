@@ -17,12 +17,8 @@ public class ReflectionUtils {
     }
 
     public static Annotation findClassAnnotations(Class<?> clazz, Class<?>... annotationClasses) {
-//        System.out.println("ReflectionUtils.findClassAnnotations");
-//        System.out.println(clazz);
         for (Class<?> annotationClass : annotationClasses) {
-//            System.out.println(annotationClass);
             Annotation annotation = clazz.getAnnotation((Class<? extends Annotation>) annotationClass);
-//            System.out.println(annotation);
             if (annotation != null) {
                 return annotation;
             }

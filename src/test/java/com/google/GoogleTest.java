@@ -13,12 +13,6 @@ import static org.testng.Assert.*;
 @WebDriverAutoInstancingByMethod
 public class GoogleTest extends BaseTest {
 
-//    @BeforeMethod
-//    public void setUp() {
-////        initializeWebDriverWithAutoTearDown();
-////        initializeWebDriverWithAutoTearDown(AutoTearDown.NONE);
-//    }
-
     @Test
     public void testSearchPositive() {
         openNewPage(GoogleHomePage.class)
