@@ -116,12 +116,12 @@ public class BaseTest {
         throw new InvalidUsageOrConfig("createWebDriver() method should be called from @BeforeClass or @BeforeMethod method");
     }
 
-    public Method getCallerMethod() {
+    private Method getCallerMethod() {
         StackTraceElement caller = Thread.currentThread().getStackTrace()[4];
         Method method = null;
         try {
             method = this.getClass().getMethod(caller.getMethodName());
-        } catch (NoSuchMethodException e) {
+        } catch (NoSuchMethodException ignored) {
         }
         return method;
     }
