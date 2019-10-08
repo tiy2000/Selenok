@@ -113,7 +113,7 @@ public class BaseTest {
         if (caller.isAnnotationPresent(BeforeMethod.class)) {
             return WebDriverAutoInstancingMode.METHOD;
         }
-        throw new InvalidUsageOrConfig("createWebDriver() method should be called from @BeforeClass or @BeforeMethod method");
+        throw new InvalidUsageOrConfig("initializeWebDriverWithAutoTearDown() method should be called from @BeforeClass or @BeforeMethod method");
     }
 
     private Method getCallerMethod() {
