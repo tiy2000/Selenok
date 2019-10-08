@@ -53,7 +53,7 @@ public class WebDriverFactory {
             case "INTERNETEXPLORER":
                 return "org.openqa.selenium.ie.InternetExplorerDriver";
             default:
-                throw new InvalidUsageOrConfig("Invalid driver name");
+                throw new InvalidUsageOrConfig("Invalid driver name '" + driverName + "'");
         }
     }
 }
