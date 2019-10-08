@@ -1,10 +1,12 @@
 package core;
 
+import javax.annotation.Nullable;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
 public class ReflectionUtils {
 
+    @Nullable
     public static <T extends Annotation> T findClassAnnotation(Class<?> clazz, Class<T> annotationClass) {
         T annotation = (T) clazz.getAnnotation(annotationClass);
         if (annotation == null) {
@@ -16,6 +18,7 @@ public class ReflectionUtils {
         return annotation;
     }
 
+    @Nullable
     public static Annotation findClassAnnotations(Class<?> clazz, Class<?>... annotationClasses) {
         for (Class<?> annotationClass : annotationClasses) {
             Annotation annotation = clazz.getAnnotation((Class<? extends Annotation>) annotationClass);
@@ -30,6 +33,7 @@ public class ReflectionUtils {
         return null;
     }
 
+    @Nullable
     public static Field findAnnotatedField(Class<?> clazz, Class<? extends Annotation> annotationClass) {
         for (Field field : clazz.getDeclaredFields()) {
             if (field.isAnnotationPresent(annotationClass)) {
@@ -43,6 +47,7 @@ public class ReflectionUtils {
         return null;
     }
 
+    @Nullable
     public static Object getAnnotatedFieldValue(Object object, Class<? extends Annotation> annotationClass) {
         Field field = findAnnotatedField(object.getClass(), annotationClass);
         if (field != null) {
@@ -51,6 +56,7 @@ public class ReflectionUtils {
         return null;
     }
 
+    @Nullable
     public static Object getFieldValue(Field field, Object target) {
         try {
             field.setAccessible(true);
@@ -60,6 +66,7 @@ public class ReflectionUtils {
         }
     }
 
+    @Nullable
     public static <T> T getFieldValue(Field field, Object target, Class<T> type) throws ClassCastException {
         try {
             field.setAccessible(true);
