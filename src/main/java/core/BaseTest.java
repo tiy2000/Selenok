@@ -9,6 +9,7 @@ import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.*;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -20,26 +21,16 @@ public class BaseTest {
         parseAutoWebDriverInstancingLevelAnnotations();
     }
 
-    //region ===== Working with WebDriver instance =====
+    //region ===== Working with WebDriver instance, initialize and tearDown =====
+    protected void initializeWebDriver() {
+        TestEnvironment.setDriver(WebDriverFactory.createNewWebDriverInstance());
+    }
 
     protected void tearDownDriver() {
         if (isDriverCreated()) {
             getDriver().quit();
-            removeDriver();
+            TestEnvironment.removeDriver();
         }
-    }
-
-    protected void initializeWebDriver() {
-        setDriver(WebDriverFactory.createNewWebDriverInstance());
-    }
-
-    //region ----- Storing the reference to WebDriver instance into TestEnvironment -----
-    private void setDriver(WebDriver driver) {
-        TestEnvironment.setDriver(driver);
-    }
-
-    private void removeDriver() {
-        TestEnvironment.removeDriver();
     }
 
     protected static WebDriver getDriver() {
@@ -51,16 +42,11 @@ public class BaseTest {
     }
     //endregion
 
-    //endregion
 
-
-    //region ===== Initialize driver =====
-
+    //region ===== Auto initialize driver =====
     public enum WebDriverAutoInstancingMode {
         NONE, METHOD, CLASS
     }
-
-    //region ---- Auto Initialize driver -----
 
     private WebDriverAutoInstancingMode webDriverAutoInitializeMode = WebDriverAutoInstancingMode.NONE;
 
@@ -88,28 +74,36 @@ public class BaseTest {
             initializeWebDriverWithAutoTearDown(WebDriverAutoInstancingMode.METHOD);
         }
     }
-
     //endregion
 
-    //region ----- Auto tearDown settings -----
 
+    //region ===== Auto tearDown driver =====
     private WebDriverAutoInstancingMode webDriverAutoTearDownMode = WebDriverAutoInstancingMode.NONE;
-
-    @Deprecated
-    protected WebDriverAutoInstancingMode getWebDriverAutoTearDownMode() {
-        return webDriverAutoTearDownMode;
-    }
-
-    @Deprecated
-    protected void setWebDriverAutoTearDownMode(WebDriverAutoInstancingMode webDriverAutoTearDownMode) {
-        this.webDriverAutoTearDownMode = webDriverAutoTearDownMode;
-    }
 
     protected void initializeWebDriverWithAutoTearDown(WebDriverAutoInstancingMode webDriverAutoInstancingMode) {
         this.webDriverAutoTearDownMode = webDriverAutoInstancingMode;
         initializeWebDriver();
     }
 
+    @AfterClass
+    protected void autoTearDownAfterClass() {
+        if (webDriverAutoTearDownMode == WebDriverAutoInstancingMode.CLASS) {
+            System.out.println("BaseTest.autoTearDownAfterClass");
+            tearDownDriver();
+        }
+    }
+
+    @AfterMethod
+    protected void autoTearDownAfterMethod() {
+        if (webDriverAutoTearDownMode == WebDriverAutoInstancingMode.METHOD) {
+            System.out.println("BaseTest.autoTearDownAfterMethod");
+            tearDownDriver();
+        }
+    }
+    //endregion
+
+
+    //region ===== Advanced auto tearDown technique =====
     protected void initializeWebDriverWithAutoTearDown() {
         this.webDriverAutoTearDownMode = determineAutoTearDown();
         initializeWebDriver();
@@ -136,61 +130,40 @@ public class BaseTest {
         return method;
     }
     //endregion
-    //endregion
 
 
-    //region ===== Auto tearDown driver =====
-
-    @AfterClass
-    protected void autoTearDownAfterClass() {
-        if (webDriverAutoTearDownMode == WebDriverAutoInstancingMode.CLASS) {
-            System.out.println("BaseTest.autoTearDownAfterClass");
-            tearDownDriver();
-        }
+    //region ===== Opening pages =====
+    protected <T extends BasePage<T>> PageBuilder<T> preparePage(Class<T> pageClass) throws InvalidUsageOrConfig {
+        return PageBuilder.createPageBuilder(pageClass);
     }
 
-    @AfterMethod
-    protected void autoTearDownAfterMethod() {
-        if (webDriverAutoTearDownMode == WebDriverAutoInstancingMode.METHOD) {
-            System.out.println("BaseTest.autoTearDownAfterMethod");
-            tearDownDriver();
-        }
+    protected <T extends BasePage<T>> T createPage(Class<T> pageClass) throws InvalidUsageOrConfig {
+        return preparePage(pageClass).getPage();
+    }
+
+    protected <T extends BasePage<T>> T openNewPage(Class<T> pageClass) throws InvalidUsageOrConfig {
+        return preparePage(pageClass).openPage();
     }
     //endregion
 
 
     //region ===== Getting screenshot =====
-
+    @Nullable
     protected static byte[] getScreenShotAsBytes() {
         try {
             return ((TakesScreenshot) getDriver()).getScreenshotAs(OutputType.BYTES);
         } catch (SessionNotCreatedException e) {
-//            logger.error(String.format("Selenium screenshot capture failed: %s", e.getMessage()));
-//            e.printStackTrace();
+            return null;
         }
-        return null;
     }
 
+    @Nullable
     protected static File getScreenShotAsFiles() {
         try {
             return ((TakesScreenshot) getDriver()).getScreenshotAs(OutputType.FILE);
         } catch (SessionNotCreatedException e) {
-//            logger.error(String.format("Selenium screenshot capture failed: %s", e.getMessage()));
-//            e.printStackTrace();
+            return null;
         }
-        return null;
-    }
-    //endregion
-
-
-    //region ===== Opening pages =====
-
-    protected <T extends BasePage<T>> PageBuilder<T> preparePage(Class<T> pageClass) throws InvalidUsageOrConfig {
-        return PageBuilder.createPageBuilder(pageClass);
-    }
-
-    protected <T extends BasePage<T>> T openNewPage(Class<T> pageClass) throws InvalidUsageOrConfig {
-        return preparePage(pageClass).openPage();
     }
     //endregion
 
@@ -216,5 +189,4 @@ public class BaseTest {
         return this;
     }
     //endregion
-
 }

@@ -26,7 +26,6 @@ public abstract class BasePage<T extends BasePage<T>> {
 
 
     //region ===== Working with WebDriver instance =====
-
     protected static WebDriver getDriver() {
         return TestEnvironment.getDriver();
     }
@@ -34,7 +33,6 @@ public abstract class BasePage<T extends BasePage<T>> {
 
 
     //region ===== Opening pages =====
-
     protected final PageUrl pageUrl = new PageUrl();
 
     public String getUrl() {
@@ -98,12 +96,10 @@ public abstract class BasePage<T extends BasePage<T>> {
                 throw new InvalidUsageOrConfig("Unsupported condition in @PageId");
         }
     }
-
     //endregion
 
 
     //region ===== Waiting elements and page conditions =====
-
     private int defaultTimeOutInSeconds = 15;
     private WebDriverWait wait = null;
 
@@ -145,7 +141,6 @@ public abstract class BasePage<T extends BasePage<T>> {
 
 
     //region ===== Working with Web elements =====
-
     public WebElement findElement(By by) {
         return waitElement(by);
     }
@@ -219,7 +214,6 @@ public abstract class BasePage<T extends BasePage<T>> {
 
 
     //region ===== Right page validation =====
-
     private ExpectedCondition<WebElement> rightPageCondition;
 
     protected ExpectedCondition<WebElement> getRightPageCondition() {
@@ -279,6 +273,7 @@ public abstract class BasePage<T extends BasePage<T>> {
     }
     //endregion
 
+
     //region ===== Assertions =====
     public T assertThan(ExpectedCondition expectedCondition) throws AssertionError {
         try {
@@ -316,5 +311,4 @@ public abstract class BasePage<T extends BasePage<T>> {
         return (T) this;
     }
     //endregion
-
 }
