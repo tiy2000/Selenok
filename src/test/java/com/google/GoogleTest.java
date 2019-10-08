@@ -2,8 +2,10 @@ package com.google;
 
 import com.google.pages.GoogleHomePage;
 import com.google.pages.GoogleSearchResultPage;
+import com.google.pages.GoogleSearchUnsuccessfulResultPage;
 import core.BaseTest;
 import core.annotations.WebDriverAutoInstancingByMethod;
+import core.exceptions.InvalidUsageOrConfig;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertEquals;
@@ -46,5 +48,11 @@ public class GoogleTest extends BaseTest {
                 .setQueryParam("q", "Java")
                 .openPage()
                 .assertIsRightPage();
+    }
+
+    @Test(expectedExceptions = InvalidUsageOrConfig.class)
+    public void testTryOpenPageWithoutPagePathSpecified() {
+        openNewPage(GoogleSearchUnsuccessfulResultPage.class)
+                .validateIsRightPage();
     }
 }

@@ -1,5 +1,7 @@
 package core.url;
 
+import core.exceptions.InvalidUsageOrConfig;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -8,7 +10,7 @@ public class PageUrl {
 
     //region Base URL and Page Path support
     private String baseUrl = "";
-    private String pagePath = "";
+    private String pagePath = null;
 
     public PageUrl setBaseUrl(String baseUrl) {
         this.baseUrl = baseUrl;
@@ -141,10 +143,11 @@ public class PageUrl {
     //region Getting complete URL
     private void checkBaseUrlAndParams() {
         if (baseUrl.isEmpty()) throw new IllegalArgumentException("Base URL is not specified");
+        if (pagePath == null) throw new InvalidUsageOrConfig("Page path is not specified");
         checkParamsSpecified();
     }
 
-    public String getUrl() {
+    public String generateUrl() {
         checkBaseUrlAndParams();
         StringBuilder sb = new StringBuilder(baseUrl);
 

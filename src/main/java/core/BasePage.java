@@ -35,10 +35,6 @@ public abstract class BasePage<T extends BasePage<T>> {
     //region ===== Opening pages =====
     protected final PageUrl pageUrl = new PageUrl();
 
-    public String getUrl() {
-        return pageUrl.getUrl();
-    }
-
     protected <T extends BasePage<T>> PageBuilder<T> preparePage(Class<T> pageClass) throws InvalidUsageOrConfig {
         return PageBuilder.createPageBuilder(pageClass);
     }

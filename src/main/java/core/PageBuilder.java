@@ -46,7 +46,7 @@ public class PageBuilder<T extends BasePage<T>> {
     }
 
     public PageBuilder<T> debugPrintUrl() {
-        System.out.println(page.pageUrl.getUrl());
+        System.out.println(page.pageUrl.generateUrl());
         return this;
     }
 
@@ -59,7 +59,12 @@ public class PageBuilder<T extends BasePage<T>> {
     }
 
     public T openPage() throws InvalidUsageOrConfig {
-        getDriver().get(page.pageUrl.getUrl());
+        try {
+            String url = page.pageUrl.generateUrl();
+            getDriver().get(url);
+        } catch (InvalidUsageOrConfig e) {
+            throw new InvalidUsageOrConfig("Page '" + page.getClass().getName() + "' cannot be opened: " + e.getMessage());
+        }
         return page;
     }
 }

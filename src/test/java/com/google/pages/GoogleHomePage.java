@@ -1,9 +1,13 @@
 package com.google.pages;
 
 import core.annotations.PageId;
+import core.annotations.PagePath;
 import org.openqa.selenium.By;
 
 public class GoogleHomePage extends GoogleBasePage<GoogleHomePage> {
+
+    @PagePath
+    private final static String PAGE_PATH = "/";
 
     @PageId
     public static final By SEARCH_TEXT_FIELD = By.name("q");
@@ -23,5 +27,4 @@ public class GoogleHomePage extends GoogleBasePage<GoogleHomePage> {
         click(SEARCH_BUTTON);
         return createPage(GoogleSearchUnsuccessfulResultPage.class);
     }
-
 }
