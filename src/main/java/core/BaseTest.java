@@ -194,48 +194,25 @@ public class BaseTest {
 
 
     //region ===== Syntax sugar =====
+    protected BaseTest testScenario() {
+        return this;
+    }
 
     protected BaseTest given() {
         return this;
     }
-    //endregion
 
+    protected BaseTest when() {
+        return this;
+    }
 
-    //region ===== FOR DEBUG ONLY =====
+    protected BaseTest then() {
+        return this;
+    }
 
-
-//    @BeforeClass
-//    public void init() {
-//        initializeWebDriverWithAutoTearDown();
-//    }
-//
-//    @Test
-//    public void test() {
-//        step1();
-//        step2();
-//    }
-//
-//    @Step
-//    private void step1() {
-//        step11();
-//        step12();
-//    }
-//
-//    @Step
-//    private void step11() {
-//
-//    }
-//
-//    @Step
-//    private void step12() {
-//
-//    }
-//
-//    @Step
-//    private void step2() {
-//
-//    }
-
+    protected BaseTest and() {
+        return this;
+    }
     //endregion
 
 }

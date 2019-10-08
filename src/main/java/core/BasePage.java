@@ -232,17 +232,16 @@ public abstract class BasePage<T extends BasePage<T>> {
     }
 
     public boolean isRightPage() throws InvalidUsageOrConfig {
-        if (rightPageCondition != null) {
+        if (rightPageCondition == null) {
+            throw new InvalidUsageOrConfig("Call isRightPage() requires the rightPageCondition, but it's not assigned");
+        } else {
             try {
                 waitCondition(rightPageCondition);
+                return true;
             } catch (TimeoutException e) {
                 return false;
             }
-        } else {
-            // Need to throw exception!
-            throw new InvalidUsageOrConfig("Call isRightPage() requires the rightPageCondition, but it's not assigned");
         }
-        return true;
     }
 
     public T validateIsRightPage() throws InvalidPageStateException {
@@ -305,11 +304,11 @@ public abstract class BasePage<T extends BasePage<T>> {
         return (T) this;
     }
 
-    public T then() {
+    public T when() {
         return (T) this;
     }
 
-    public T when() {
+    public T then() {
         return (T) this;
     }
 
