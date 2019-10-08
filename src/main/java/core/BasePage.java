@@ -27,10 +27,7 @@ public abstract class BasePage<T extends BasePage<T>> {
 
     //region ===== Working with WebDriver instance =====
 
-//    static final ThreadLocal<WebDriver> driverThreadLocal = new ThreadLocal<>();
-
     protected static WebDriver getDriver() {
-//        return driverThreadLocal.get();
         return TestEnvironment.getDriver();
     }
     //endregion
@@ -80,20 +77,20 @@ public abstract class BasePage<T extends BasePage<T>> {
         if (pageIdField == null) return;
 
         if (pageIdField.getType().equals(By.class)) {
-            parsePageIdAnnotationWithByField(pageIdField);
+            parsePageIdAnnotationWithLocatorField(pageIdField);
         } else if (pageIdField.getType().equals(ExpectedCondition.class)) {
-            rightPageCondition = ReflectionUtils.getFieldValue(pageIdField, ExpectedCondition.class, this);
+            rightPageCondition = ReflectionUtils.getFieldValue(pageIdField, this, ExpectedCondition.class);
         } else {
             throw new InvalidUsageOrConfig("@PageId annotation should be applied to By or ExpectedCondition field type only");
         }
     }
 
-    private void parsePageIdAnnotationWithByField(Field pageIdField) {
+    private void parsePageIdAnnotationWithLocatorField(Field pageIdField) {
         PageId pageIdAnnotation = pageIdField.getAnnotation(PageId.class);
         PageId.Condition condition = pageIdAnnotation.condition();
         switch (condition) {
             case ELEMENT_PRESENTED:
-                By pageIdLocator = ReflectionUtils.getFieldValue(pageIdField, By.class, this);
+                By pageIdLocator = ReflectionUtils.getFieldValue(pageIdField, this, By.class);
                 if (pageIdLocator != null)
                     rightPageCondition = ExpectedConditions.presenceOfElementLocated(pageIdLocator);
                 break;
@@ -108,7 +105,12 @@ public abstract class BasePage<T extends BasePage<T>> {
     //region ===== Waiting elements and page conditions =====
 
     private int defaultTimeOutInSeconds = 15;
-    private WebDriverWait wait = new WebDriverWait(getDriver(), defaultTimeOutInSeconds);
+    private WebDriverWait wait = null;
+
+    public WebDriverWait getWait() {
+        if (wait == null) wait = new WebDriverWait(getDriver(), defaultTimeOutInSeconds);
+        return wait;
+    }
 
     public int getDefaultTimeOutInSeconds() {
         return defaultTimeOutInSeconds;
@@ -119,35 +121,24 @@ public abstract class BasePage<T extends BasePage<T>> {
         return (T) this;
     }
 
-    public WebElement waitElement(By by) throws TimeoutException {
-        System.out.println("BasePage.waitElement ENTER, BY: " + by.toString());
 
-        WebElement element = wait
+    public WebElement waitElement(By by) throws TimeoutException {
+        WebElement element = getWait()
                 .withTimeout(Duration.ofSeconds(defaultTimeOutInSeconds))
                 .until(ExpectedConditions.presenceOfElementLocated(by));
-
-        System.out.println("BasePage.waitElement EXIT");
         return element;
     }
 
     public WebElement waitElement(ExpectedCondition<WebElement> condition) throws TimeoutException {
-        System.out.println("BasePage.waitByCondition ENTER, BY: " + condition.toString());
-
-        WebElement element = wait
+        WebElement element = getWait()
                 .withTimeout(Duration.ofSeconds(defaultTimeOutInSeconds))
                 .until(condition);
-
-        System.out.println("BasePage.waitByCondition EXIT");
         return element;
     }
 
     public T waitCondition(ExpectedCondition<WebElement> condition) throws TimeoutException {
-        System.out.println("BasePage.waitCondition ENTER, BY: " + condition.toString());
-
-        wait.withTimeout(Duration.ofSeconds(defaultTimeOutInSeconds))
+        getWait().withTimeout(Duration.ofSeconds(defaultTimeOutInSeconds))
                 .until(condition);
-
-        System.out.println("BasePage.waitCondition EXIT");
         return (T) this;
     }
     //endregion
@@ -159,18 +150,6 @@ public abstract class BasePage<T extends BasePage<T>> {
         return waitElement(by);
     }
 
-//    private T sendKeys(By by, CharSequence... charSequences) {
-//        findElement(by).sendKeys(charSequences);
-//        return (T) this;
-//    }
-//
-//    private T clearAndFill(By by, CharSequence... charSequences) {
-//        WebElement element = waitElement(ExpectedConditions.visibilityOfElementLocated(by));
-//        element.clear();
-//        element.sendKeys(charSequences);
-//        return (T) this;
-//    }
-
     public T enterInputValue(By by, CharSequence... charSequences) {
         WebElement element = waitElement(ExpectedConditions.visibilityOfElementLocated(by));
         element.clear();
@@ -178,8 +157,20 @@ public abstract class BasePage<T extends BasePage<T>> {
         return (T) this;
     }
 
-    public String getInputValue(By by, CharSequence... charSequences) {
+    public T enterInputValue(ExpectedCondition<WebElement> condition, CharSequence... charSequences) {
+        WebElement element = waitElement(condition);
+        element.clear();
+        element.sendKeys(charSequences);
+        return (T) this;
+    }
+
+    public String getInputValue(By by) {
         WebElement element = waitElement(ExpectedConditions.visibilityOfElementLocated(by));
+        return element.getAttribute("value");
+    }
+
+    public String getInputValue(ExpectedCondition<WebElement> condition) {
+        WebElement element = waitElement(condition);
         return element.getAttribute("value");
     }
 
@@ -188,14 +179,39 @@ public abstract class BasePage<T extends BasePage<T>> {
         return (T) this;
     }
 
+    public T click(ExpectedCondition<WebElement> condition) {
+        waitElement(condition).click();
+        return (T) this;
+    }
+
+    public Select getSelect(By by) {
+        return new Select(waitElement(ExpectedConditions.visibilityOfElementLocated(by)));
+    }
+
+    public Select getSelect(ExpectedCondition<WebElement> condition) {
+        return new Select(waitElement(condition));
+    }
+
     public T selectByValue(By by, String value) {
-        Select select = new Select(waitElement(ExpectedConditions.visibilityOfElementLocated(by)));
+        Select select = getSelect(by);
+        select.selectByValue(value);
+        return (T) this;
+    }
+
+    public T selectByValue(ExpectedCondition<WebElement> condition, String value) {
+        Select select = getSelect(condition);
         select.selectByValue(value);
         return (T) this;
     }
 
     public T selectByIndex(By by, int index) {
-        Select select = new Select(waitElement(ExpectedConditions.visibilityOfElementLocated(by)));
+        Select select = getSelect(by);
+        select.selectByIndex(index);
+        return (T) this;
+    }
+
+    public T selectByIndex(ExpectedCondition<WebElement> condition, int index) {
+        Select select = getSelect(condition);
         select.selectByIndex(index);
         return (T) this;
     }

@@ -60,7 +60,7 @@ public class ReflectionUtils {
         }
     }
 
-    public static <T> T getFieldValue(Field field, Class<T> type, Object target) throws ClassCastException {
+    public static <T> T getFieldValue(Field field, Object target, Class<T> type) throws ClassCastException {
         try {
             field.setAccessible(true);
             return (T) field.get(target);
