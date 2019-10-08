@@ -95,6 +95,16 @@ public class BaseTest {
 
     private WebDriverAutoInstancingMode webDriverAutoTearDownMode = WebDriverAutoInstancingMode.NONE;
 
+    @Deprecated
+    protected WebDriverAutoInstancingMode getWebDriverAutoTearDownMode() {
+        return webDriverAutoTearDownMode;
+    }
+
+    @Deprecated
+    protected void setWebDriverAutoTearDownMode(WebDriverAutoInstancingMode webDriverAutoTearDownMode) {
+        this.webDriverAutoTearDownMode = webDriverAutoTearDownMode;
+    }
+
     protected void initializeWebDriverWithAutoTearDown(WebDriverAutoInstancingMode webDriverAutoInstancingMode) {
         this.webDriverAutoTearDownMode = webDriverAutoInstancingMode;
         initializeWebDriver();
@@ -130,14 +140,6 @@ public class BaseTest {
 
 
     //region ===== Auto tearDown driver =====
-
-    protected WebDriverAutoInstancingMode getWebDriverAutoTearDownMode() {
-        return webDriverAutoTearDownMode;
-    }
-
-    protected void setWebDriverAutoTearDownMode(WebDriverAutoInstancingMode webDriverAutoTearDownMode) {
-        this.webDriverAutoTearDownMode = webDriverAutoTearDownMode;
-    }
 
     @AfterClass
     protected void autoTearDownAfterClass() {
