@@ -26,7 +26,7 @@ public class GoogleTest extends BaseTest {
         String enteredText = openNewPage(GoogleHomePage.class)
                 .validateIsRightPage()
                 .enterSearchTextField(searchText)
-                .getInputValue(GoogleHomePage.searchTextField);
+                .getInputValue(GoogleHomePage.SEARCH_TEXT_FIELD);
 
         assertEquals(enteredText, searchText);
     }

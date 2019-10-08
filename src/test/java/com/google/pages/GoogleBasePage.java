@@ -6,6 +6,6 @@ import core.annotations.BaseUrl;
 public class GoogleBasePage<T extends GoogleBasePage<T>> extends BasePage<T> {
 
     @BaseUrl
-    private final static String baseUrl = "http://google.com";
+    private final static String GOOGLE_BASE_URL = "http://google.com";
 
 }
