@@ -53,7 +53,7 @@ public class BaseTest {
     private void parseAutoWebDriverInstancingLevelAnnotations() {
         Annotation annotation = ReflectionUtils.findClassAnnotations(this.getClass(), WebDriverAutoInstancingByClass.class, WebDriverAutoInstancingByMethod.class);
         if (annotation != null) {
-            if (annotation.getClass().equals(WebDriverAutoInstancingByMethod.class)) {
+            if (WebDriverAutoInstancingByMethod.class.isInstance(annotation)) {
                 webDriverAutoInitializeMode = WebDriverAutoInstancingMode.METHOD;
             } else {
                 webDriverAutoInitializeMode = WebDriverAutoInstancingMode.CLASS;
