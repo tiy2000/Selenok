@@ -17,6 +17,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.lang.reflect.Field;
 import java.time.Duration;
+import java.util.List;
 
 public abstract class BasePage<T extends BasePage<T>> {
 
@@ -183,6 +184,30 @@ public abstract class BasePage<T extends BasePage<T>> {
         return new Select(waitElement(condition));
     }
 
+
+    public List<WebElement> getSelectedOptions(By by) {
+        return getSelect(by).getAllSelectedOptions();
+    }
+
+    public List<WebElement> getSelectedOptions(ExpectedCondition<WebElement> condition) {
+        return getSelect(condition).getAllSelectedOptions();
+    }
+
+    public WebElement getSelectedOption(By by) {
+        List<WebElement> selectedOptions = getSelectedOptions(by);
+        return getSelectedOption(selectedOptions);
+    }
+
+    public WebElement getSelectedOption(ExpectedCondition<WebElement> condition) {
+        List<WebElement> selectedOptions = getSelectedOptions(condition);
+        return getSelectedOption(selectedOptions);
+    }
+
+    private WebElement getSelectedOption(List<WebElement> selectedOptions) {
+        if (selectedOptions.size() != 1) throw new IllegalStateException("There is no selected options");
+        return selectedOptions.get(0);
+    }
+
     public T selectByValue(By by, String value) {
         Select select = getSelect(by);
         select.selectByValue(value);
@@ -204,6 +229,18 @@ public abstract class BasePage<T extends BasePage<T>> {
     public T selectByIndex(ExpectedCondition<WebElement> condition, int index) {
         Select select = getSelect(condition);
         select.selectByIndex(index);
+        return (T) this;
+    }
+
+    public T selectByVisibleText(By by, String visibleText) {
+        Select select = getSelect(by);
+        select.selectByVisibleText(visibleText);
+        return (T) this;
+    }
+
+    public T selectByVisibleText(ExpectedCondition<WebElement> condition, String visibleText) {
+        Select select = getSelect(condition);
+        select.selectByVisibleText(visibleText);
         return (T) this;
     }
     //endregion
