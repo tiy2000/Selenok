@@ -6,6 +6,7 @@ import core.annotations.PagePath;
 import core.exceptions.InvalidPageStateException;
 import core.exceptions.InvalidUsageOrConfig;
 import core.url.PageUrl;
+import org.hamcrest.Matcher;
 import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
@@ -308,7 +309,23 @@ public abstract class BasePage<T extends BasePage<T>> {
 
 
     //region ===== Assertions =====
-    public T assertThan(ExpectedCondition expectedCondition) throws AssertionError {
+    public <T2> T assertThat(T2 actual, Matcher<? super T2> matcher) {
+        org.hamcrest.MatcherAssert.assertThat("", actual, matcher);
+        return (T) this;
+    }
+
+    public <T2> T assertThat(String reason, T2 actual, Matcher<? super T2> matcher) {
+        org.hamcrest.MatcherAssert.assertThat(reason, actual, matcher);
+        return (T) this;
+    }
+
+    public T assertThat(String reason, boolean assertion) {
+        org.hamcrest.MatcherAssert.assertThat(reason, assertion);
+//        org.openqa.selenium.lift.Matchers.attribute()
+        return (T) this;
+    }
+
+    public T assertThan(ExpectedCondition expectedCondition) {
         try {
             waitElement(expectedCondition);
         } catch (TimeoutException e) {
