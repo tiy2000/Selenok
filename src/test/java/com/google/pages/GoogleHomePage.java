@@ -20,11 +20,13 @@ public class GoogleHomePage extends GoogleBasePage<GoogleHomePage> {
 
     public GoogleSearchResultPage clickSearchButton() {
         click(SEARCH_BUTTON);
-        return createPage(GoogleSearchResultPage.class);
+//        return createPage(GoogleSearchResultPage.class);
+        return createPageByReturnType();
     }
 
     public GoogleSearchUnsuccessfulResultPage clickSearchButtonUnsuccessful() {
         click(SEARCH_BUTTON);
-        return createPage(GoogleSearchUnsuccessfulResultPage.class);
+//        return createPage(GoogleSearchUnsuccessfulResultPage.class);
+        return createPageByReturnType();
     }
 }

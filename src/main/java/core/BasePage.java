@@ -41,12 +41,32 @@ public abstract class BasePage<T extends BasePage<T>> {
         return PageBuilder.createPageBuilder(pageClass);
     }
 
+    protected <T extends BasePage<T>> T openNewPage(Class<T> pageClass) throws InvalidUsageOrConfig {
+        return preparePage(pageClass).openPage();
+    }
+
     protected <T extends BasePage<T>> T createPage(Class<T> pageClass) throws InvalidUsageOrConfig {
         return preparePage(pageClass).getPage();
     }
 
-    protected <T extends BasePage<T>> T openNewPage(Class<T> pageClass) throws InvalidUsageOrConfig {
-        return preparePage(pageClass).openPage();
+    protected <T extends BasePage<T>> T createPageByReturnType() throws InvalidUsageOrConfig {
+        Class<? extends BasePage> pageClass = getCallerReturnTypeClass();
+        return (T) createPage(pageClass);
+    }
+
+    private Class getCallerReturnTypeClass() {
+        try {
+            return this
+                    .getClass()
+                    .getMethod(
+                            Thread
+                                    .currentThread()
+                                    .getStackTrace()[3] // getStackTrace <- getCallerReturnTypeClass <- createPageByContext <- CALLER
+                                    .getMethodName()
+                    ).getReturnType();
+        } catch (NoSuchMethodException ignored) {
+            return null;
+        }
     }
     //endregion
 
