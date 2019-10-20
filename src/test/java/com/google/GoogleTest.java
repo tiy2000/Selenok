@@ -4,6 +4,7 @@ import com.google.pages.GoogleHomePage;
 import com.google.pages.GoogleSearchResultPage;
 import com.google.pages.GoogleSearchUnsuccessfulResultPage;
 import core.BaseTest;
+import core.PageObjectDebugUtils;
 import core.annotations.WebDriverAutoInstancingByMethod;
 import core.exceptions.InvalidUsageOrConfig;
 import org.testng.annotations.Test;
@@ -54,5 +55,11 @@ public class GoogleTest extends BaseTest {
     public void testTryOpenPageWithoutPagePathSpecified() {
         openNewPage(GoogleSearchUnsuccessfulResultPage.class)
                 .validateIsRightPage();
+    }
+
+    @Test
+    public void testPageObjectDebugInfo() {
+        openNewPage(GoogleHomePage.class)
+                .printDebugInfo();
     }
 }

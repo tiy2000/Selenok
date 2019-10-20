@@ -28,7 +28,7 @@ public abstract class BasePage<T extends BasePage<T>> {
 
 
     //region ===== Working with WebDriver instance =====
-    protected static WebDriver getDriver() {
+    public static WebDriver getDriver() {
         return TestEnvironment.getDriver();
     }
     //endregion
@@ -363,6 +363,10 @@ public abstract class BasePage<T extends BasePage<T>> {
     }
     //endregion
 
+    public T printDebugInfo() {
+        PageObjectDebugUtils.printDebugInfo(this);
+        return (T) this;
+    }
 
     //region ===== Syntax sugar =====
     public T testScenario() {

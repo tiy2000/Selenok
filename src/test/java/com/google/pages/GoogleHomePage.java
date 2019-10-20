@@ -3,6 +3,9 @@ package com.google.pages;
 import core.annotations.PageId;
 import core.annotations.PagePath;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class GoogleHomePage extends GoogleBasePage<GoogleHomePage> {
 
@@ -11,7 +14,7 @@ public class GoogleHomePage extends GoogleBasePage<GoogleHomePage> {
 
     @PageId
     public static final By SEARCH_TEXT_FIELD = By.name("q");
-    public static final By SEARCH_BUTTON = By.xpath("(//input[@name=\"btnK\"])[2]");
+    public static final By SEARCH_BUTTON = By.xpath("(//input[@name='btnK'])[2]");
 
     public GoogleHomePage enterSearchTextField(String text) {
         enterInputValue(SEARCH_TEXT_FIELD, text);
