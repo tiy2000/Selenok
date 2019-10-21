@@ -9,7 +9,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class GoogleHomePage extends GoogleBasePage<GoogleHomePage> {
 
-    @PagePath
+    @PagePath(loadable = true)
     private final static String PAGE_PATH = "/";
 
     @PageId

@@ -10,7 +10,8 @@ public class PageUrl {
 
     //region Base URL and Page Path support
     private String baseUrl = "";
-    private String pagePath = null;
+    private String pagePath = "";
+    private boolean loadable = false;
 
     public PageUrl setBaseUrl(String baseUrl) {
         this.baseUrl = baseUrl;
@@ -21,13 +22,27 @@ public class PageUrl {
         return baseUrl;
     }
 
+    public String getPagePath() {
+        return pagePath;
+    }
+
     public PageUrl setPagePath(String pagePath) {
         this.pagePath = pagePath;
         return this;
     }
 
-    public String getPagePath() {
-        return pagePath;
+    public PageUrl setPagePathLoadable(String pagePath) {
+        this.pagePath = pagePath;
+        return setLoadable(true);
+    }
+
+    public boolean isLoadable() {
+        return loadable;
+    }
+
+    public PageUrl setLoadable(boolean loadable) {
+        this.loadable = loadable;
+        return this;
     }
     //endregion
 
@@ -143,7 +158,7 @@ public class PageUrl {
     //region Getting complete URL
     private void checkBaseUrlAndParams() {
         if (baseUrl.isEmpty()) throw new IllegalArgumentException("Base URL is not specified");
-        if (pagePath == null) throw new InvalidUsageOrConfig("Page path is not specified");
+//        if (pagePath == null) throw new InvalidUsageOrConfig("Page path is not specified");
         checkParamsSpecified();
     }
 

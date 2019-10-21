@@ -84,8 +84,16 @@ public abstract class BasePage<T extends BasePage<T>> {
     }
 
     private void parsePagePathAnnotation() {
-        String pagePath = (String) ReflectionUtils.getAnnotatedFieldValue(this, PagePath.class);
-        if (pagePath != null) pageUrl.setPagePath(pagePath);
+        Field field = ReflectionUtils.findAnnotatedField(this.getClass(), PagePath.class);
+//        String pagePath = (String) ReflectionUtils.getAnnotatedFieldValue(this, PagePath.class);
+        if (field != null) {
+            String pagePath = ReflectionUtils.getFieldValue(field,this,String.class);
+            if (((PagePath) field.getAnnotation(PagePath.class)).loadable()) {
+                pageUrl.setPagePathLoadable(pagePath);
+            } else {
+                pageUrl.setPagePath(pagePath);
+            }
+        }
     }
 
     private void parsePageIdAnnotation() {

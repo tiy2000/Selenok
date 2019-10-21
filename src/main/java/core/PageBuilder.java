@@ -60,6 +60,8 @@ public class PageBuilder<T extends BasePage<T>> {
 
     public T openPage() throws InvalidUsageOrConfig {
         try {
+            if (!page.pageUrl.isLoadable()) throw new InvalidUsageOrConfig("Page is not loadable");
+
             String url = page.pageUrl.generateUrl();
             getDriver().get(url);
         } catch (InvalidUsageOrConfig e) {
