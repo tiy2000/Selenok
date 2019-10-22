@@ -1,5 +1,7 @@
 package core.url;
 
+import core.ReflectionUtils;
+
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -154,6 +156,27 @@ public class PageUrl {
     //endregion
 
 
+    //region PageUrl Template support
+    public PageUrl applyTemplates(Class<? extends PageUrl.Template>... templates) {
+        if (templates.length > 0) Arrays.stream(templates).forEach(this::applyTemplate);
+        return this;
+    }
+
+    public PageUrl applyTemplate(Class<? extends PageUrl.Template> templateClass) {
+        return applyTemplate(ReflectionUtils.newInstance(templateClass));
+    }
+
+    public PageUrl applyTemplate(PageUrl.Template template) {
+        if (template != null) template.apply(this);
+        return this;
+    }
+
+    public interface Template {
+        void apply(PageUrl pageUrl);
+    }
+    //endregion
+
+
     //region Getting complete URL
     private void checkBaseUrlAndParams() {
         if (baseUrl.isEmpty()) throw new IllegalArgumentException("Base URL is not specified");
@@ -172,18 +195,6 @@ public class PageUrl {
         makeQueryParamsString(sb);
 
         return sb.toString();
-    }
-    //endregion
-
-
-    //region PageUrl Template support
-    public PageUrl applyTemplates(PageUrl.Template... templates) {
-        Arrays.stream(templates).forEach(template -> template.apply(this));
-        return this;
-    }
-
-    public interface Template {
-        void apply(PageUrl pageUrl);
     }
     //endregion
 }
