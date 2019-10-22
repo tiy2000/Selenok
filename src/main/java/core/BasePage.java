@@ -18,7 +18,9 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.lang.reflect.Field;
 import java.time.Duration;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public abstract class BasePage<T extends BasePage<T>> {
 
@@ -85,14 +87,18 @@ public abstract class BasePage<T extends BasePage<T>> {
 
     private void parsePagePathAnnotation() {
         Field field = ReflectionUtils.findAnnotatedField(this.getClass(), PagePath.class);
-//        String pagePath = (String) ReflectionUtils.getAnnotatedFieldValue(this, PagePath.class);
         if (field != null) {
-            String pagePath = ReflectionUtils.getFieldValue(field,this,String.class);
-            if (((PagePath) field.getAnnotation(PagePath.class)).loadable()) {
+            String pagePath = ReflectionUtils.getFieldValue(field, this, String.class);
+            PagePath pagePathAnnotation = field.getAnnotation(PagePath.class);
+            if (pagePathAnnotation.loadable()) {
                 pageUrl.setPagePathLoadable(pagePath);
             } else {
                 pageUrl.setPagePath(pagePath);
             }
+            Arrays.stream(pagePathAnnotation.templates())
+                    .map(ReflectionUtils::newInstance)
+                    .filter(Objects::nonNull)
+                    .forEach(t-> t.apply(pageUrl));
         }
     }
 

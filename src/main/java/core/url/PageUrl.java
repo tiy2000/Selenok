@@ -1,7 +1,6 @@
 package core.url;
 
-import core.exceptions.InvalidUsageOrConfig;
-
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -158,7 +157,6 @@ public class PageUrl {
     //region Getting complete URL
     private void checkBaseUrlAndParams() {
         if (baseUrl.isEmpty()) throw new IllegalArgumentException("Base URL is not specified");
-//        if (pagePath == null) throw new InvalidUsageOrConfig("Page path is not specified");
         checkParamsSpecified();
     }
 
@@ -176,4 +174,17 @@ public class PageUrl {
         return sb.toString();
     }
     //endregion
+
+
+    //region PageUrl Template support
+    public PageUrl applyTemplates(PageUrl.Template... templates) {
+        Arrays.stream(templates).forEach(template -> template.apply(this));
+        return this;
+    }
+
+    public interface Template {
+        void apply(PageUrl pageUrl);
+    }
+    //endregion
 }
+

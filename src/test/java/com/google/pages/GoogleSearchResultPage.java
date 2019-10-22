@@ -6,7 +6,7 @@ import org.openqa.selenium.By;
 
 public class GoogleSearchResultPage extends GoogleBasePage<GoogleSearchResultPage> {
 
-    @PagePath(loadable = true)
+    @PagePath()
     private final static String PAGE_PATH = "search";
 
     @PageId
